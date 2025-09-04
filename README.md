@@ -13,6 +13,18 @@ python3 -m venv .venv
 source .venv/bin/activate
 # Windows (command prompt)
 .venv/Scripts/activate.bat
+# Windows (PowerShell)
+.venv/Scripts/activate.ps1
 
 pip install -r requirements.txt
+
+# Django setup
+python manage.py createsuperuser
+python manage.py runserver
+
+# Tailwind setup
+npm i
+npm run watch
+
+# Run `python manage.py runserver` and `npm run watch` in separate terminal tabs. Enjoy the website!
 ```
