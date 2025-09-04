@@ -7,6 +7,12 @@
 	"languages": {
 		"Python": {
 			// "format_on_save": "on"
+		},
+		"JavaScript": {
+			"format_on_save": "on"
+		},
+		"HTML": {
+			"preferred_line_length": 99999
 		}
 	},
 	"hard_tabs": true
