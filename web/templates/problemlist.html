@@ -10,18 +10,43 @@
 	</div>
 
 	{# TODO: infinite scrolling/pagination #}
-	<ul class="flex flex-row gap-8 my-8">
-		{% for problem in problems %}
-		<li>
-			<a class="flex flex-col justify-center bg-slate-900 hover:bg-slate-800 transition-colors duration-75 border-b-4 border-wlblue px-4 py-2 w-64 h-24" href="{{ problem.url }}" class="">
-				<h1 class="text-xl font-bold">{{ problem.title }}</h1>
-				<p class="bottom-2 w-full mt-1">
-					<span>Points: {{ problem.points }}</span>
-					<span class="text-slate-400 float-right">{{ problem.date_added | date:"Y/m/d" }}</span>
-				</p>
-			</a>
-		</li>
-		{% endfor %}
-	</ul>
+	{# Table of problems #}
+	<div class="overflow-x-auto my-8">
+		<table class="w-full text-left border-collapse">
+			<thead class="bg-slate-800 text-slate-200">
+
+				<tr>
+					<th class="px-4 py-2 border-b2 border-wlblue sortable">Name</th>
+					<th class="px-4 py-2 border-b2 border-wlblue sortable">Category</th>
+					<th class="px-4 py-2 border-b2 border-wlblue sortable">Points</th>
+					<th class="px-4 py-2 border-b2 border-wlblue">Solved</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for problem in problems %}
+				<tr class="hover:bg-slate-800 transition-colors duration-75">
+					<td class="px-4 py-2 border-b border-slate-700">
+						<a href="{{ problem.url }}" class="underline hover:text-wlblue">
+							{{ problem.title }}
+						</a>
+					</td>
+					<td class="px-4 py-2 border-b border-slate-700">
+						{{ problem.category }}
+					</td>
+					<td class="px-4 py-2 border-b border-slate-700">
+						{{ problem.points }}
+					</td>
+					<td class="px-4 py-2 border-b border-slate-700">
+						{% if user.is_authenticated and problem in user.problems_solved.all %}
+							S
+						{% else %}
+							X
+						{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 </div>
 {% endblock content %}

@@ -30,3 +30,13 @@ table {
 	color: var(--color-red-300);
 	margin-block: 0.25rem;
 }
+
+th.sortable.asc::after {
+  content: " ▲";
+  @apply text-slate-400;
+}
+
+th.sortable.desc::after {
+  content: " ▼";
+  @apply text-slate-400;
+}
