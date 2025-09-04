@@ -48,15 +48,15 @@ class SubmitProblemForm(forms.Form):
 		return super().clean()
 
 def problem_list(request):
-    problems = Problem.objects.order_by("date_added")
+	problems = Problem.objects.order_by("date_added")
 
-    if request.user.is_authenticated:
-        # prefetch problems_solved for the current user
-        request.user.problems_solved.set(
-            request.user.problems_solved.all().select_related()
-        )
+	if request.user.is_authenticated:
+		# prefetch problems_solved for the current user
+		request.user.problems_solved.set(
+			request.user.problems_solved.all().select_related()
+		)
 
-    return render(request, "problemlist.html", {"problems": problems})
+	return render(request, "problemlist.html", {"problems": problems})
 
 
 class RegistrationForm(UserCreationForm):
