@@ -19,6 +19,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Django setup
+python manage.py migrate --run-syncdb
 python manage.py createsuperuser
 python manage.py runserver
 
