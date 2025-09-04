@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="w-128 m-auto border border-slate-500 bg-slate-900 rounded p-4 leading-7">
+<h1 class="text-3xl font-bold mb-2">{% block title %}{% endblock title %}</h1>
+{% if form %}
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    <table class="border-spacing-2 rounded">
+        <tbody>
+        {% for field in form %}
+	        <tr>
+	            <td class="text-right"><label for="{{ field.id_for_label }}">{{ field.label }}:</label></td>
+	            <td>{{ field }}</td>
+	        </tr>
+	        {% if field.errors %}
+		        <tr>
+		        	<td></td>
+		        	<td class="text-red-300">{{ field.errors }}</td>
+		        </tr>
+	        {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <button type="submit" class="bg-wlblue rounded px-2 py-0.5 float-right" >{% block submittext %}{% endblock submittext %}</button>
+</form>
+{% endif %}
+{% block afterform %}{% endblock afterform %}
+</div>
+{% endblock content %}

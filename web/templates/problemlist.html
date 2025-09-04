@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="w-full h-full p-16 max-w-[64rem]">
+	<div class="bg-slate-900 p-4 border-b-4 border-wlblue">
+		<h1 class="text-5xl font-bold mb-4">Problem list</h1>
+		<p>
+			Filters: TODO
+		</p>
+	</div>
+
+	{# TODO: infinite scrolling/pagination #}
+	<ul class="flex flex-row gap-8 my-8">
+		{% for problem in problems %}
+		<li>
+			<a class="flex flex-col justify-center bg-slate-900 hover:bg-slate-800 transition-colors duration-75 border-b-4 border-wlblue px-4 py-2 w-64 h-24" href="{{ problem.url }}" class="">
+				<h1 class="text-xl font-bold">{{ problem.title }}</h1>
+				<p class="bottom-2 w-full mt-1">
+					<span>Points: {{ problem.points }}</span>
+					<span class="text-slate-400 float-right">{{ problem.date_added | date:"Y/m/d" }}</span>
+				</p>
+			</a>
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endblock content %}

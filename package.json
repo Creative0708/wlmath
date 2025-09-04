@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "watch": "tailwindcss --cwd web -i static/base.css -o static/generated.css --watch"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.12",
+    "tailwindcss": "^4.1.12"
+  }
+}
