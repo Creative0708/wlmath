@@ -30,6 +30,17 @@ table {
 	margin-block: 0.25rem;
 }
 
+
+th.sortable.asc::after {
+  content: " ▲";
+  @apply text-slate-400;
+}
+
+th.sortable.desc::after {
+  content: " ▼";
+  @apply text-slate-400;
+}
+
 .password-visibility-container {
 	position: relative;
 
@@ -62,3 +73,4 @@ table {
 		}
 	}
 }
+

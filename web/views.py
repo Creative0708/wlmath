@@ -44,12 +44,20 @@ class SubmitProblemForm(forms.Form):
 
 	def clean(self):
 		if not self.errors and self.cleaned_data.get("answer") != self.problem.answer:
-			self.add_error("answer", f"Wrong answer. (Hint: it's {self.problem.answer})")
+			self.add_error("answer", f"[testing] answer is {self.problem.answer}")
 		return super().clean()
 
 def problem_list(request):
-	problems = Problem.objects.order_by("date_added")
-	return render(request, "problemlist.html", { "problems": problems })
+    problems = Problem.objects.order_by("date_added")
+
+    if request.user.is_authenticated:
+        # prefetch problems_solved for the current user
+        request.user.problems_solved.set(
+            request.user.problems_solved.all().select_related()
+        )
+
+    return render(request, "problemlist.html", {"problems": problems})
+
 
 class RegistrationForm(UserCreationForm):
 	password1, password2 = SetPasswordMixin.create_password_fields(label2="Confirm")
