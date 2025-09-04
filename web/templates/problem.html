@@ -20,8 +20,8 @@
 
 {% block content %}
 <div class="grow w-full flex gap-4">
-    <div class="bg-slate-900 p-4 border-b-4 border-wlblue grow">
-        <h1 class="text-5xl font-bold mb-4">
+	<div class="bg-slate-900 p-4 border-b-4 border-wlblue grow">
+		<h1 class="text-5xl font-bold mb-4">
 			{% if solved %}
 			<svg class="inline size-12" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
 				<path class="fill-green-300" d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
@@ -44,11 +44,11 @@
 				{{ form.answer.errors }}
 
 				<div class="grid grid-cols-[1fr_auto] gap-2 items-center">
-                    {{ form.answer }}
-                    <button type="submit" class="bg-wlblue text-white px-2 py-1 rounded-lg hover:bg-wlblue/80">
-                        Go!
-                    </button>
-                </div>
+					{{ form.answer }}
+					<button type="submit" class="bg-wlblue text-white px-2 py-1 rounded-lg hover:bg-wlblue/80">
+						Go!
+					</button>
+				</div>
 
 				{% if success or solved %}
 				<p class="text-green-300 mt-3">
