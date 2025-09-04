@@ -15,8 +15,9 @@ def index(request):
 	return render(request, "index.html", { "problems": recent_problems })
 
 def problem(request, slug):
+	user = request.user
 	problem = get_object_or_404(Problem, slug=slug)
-	solved = request.user.problems_solved.contains(problem)
+	solved = not user.is_anonymous and user.problems_solved.contains(problem)
 
 	success = False
 	if request.method == "POST":
@@ -35,7 +36,7 @@ def problem(request, slug):
 	})
 
 class SubmitProblemForm(forms.Form):
-	answer = forms.CharField(max_length=consts.ANSWER_MAX_LENGTH)
+	answer = forms.CharField(max_length=consts.ANSWER_MAX_LENGTH, widget=forms.TextInput(attrs={ "class": "w-full" }))
 
 	def __init__(self, *args, problem: Problem, **kwargs) -> None:
 		self.problem = problem

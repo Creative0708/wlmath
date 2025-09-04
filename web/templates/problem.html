@@ -1,53 +1,78 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+
+{% block head %}
+{% if success %}
+<script src="/static/confettea.min.js"></script>
+<script>
+	if (!matchMedia("(prefers-reduced-motion)").matches) {
+		addEventListener("DOMContentLoaded", () => {
+			confettea.burst({
+				origin: { x: 0.5, y: 0 },
+				colors: ["var(--color-wlblue)", "var(--color-slate-300)", "var(--color-green-300)"],
+				spread: 180,
+				particleCount: 300,
+			});
+		});
+	}
+</script>
+{% endif %}
+{% endblock head %}
+
+{% block content %}
 <div class="grow w-full flex gap-4">
     <div class="bg-slate-900 p-4 border-b-4 border-wlblue grow">
         <h1 class="text-5xl font-bold mb-4">
 			{% if solved %}
 			<svg class="inline size-12" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-				<path class="fill-green-300" d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
+				<path class="fill-green-300" d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
 			</svg>
-			{% endif %}
-			{{ problem.title }}
+			{% endif %} {{ problem.title }}
 		</h1>
-        <hr class="border-2 border-wlblue my-4">
-        <p>
-            {{ problem.body_text }}
-        </p>
-    </div>
+		<hr class="border-2 border-wlblue my-4" />
+		<p>{{ problem.body_text }}</p>
+	</div>
 
-    {# sidebar #}
-    <div class="flex flex-col">
-        <div class="self-start bg-slate-900 p-4 border-b-4 border-wlblue relative w-64 leading-5">
-            <h1 class="text-2xl font-bold mb-2">Submit</h1>
-            <form method="post">
-                {% csrf_token %} {{ form.non_field_errors }} {{ form.answer.errors }}
+	{# sidebar #}
+	<div class="flex flex-col">
+		<div class="self-start bg-slate-900 p-4 border-b-4 border-wlblue relative w-64 leading-5">
+			<h1 class="text-2xl font-bold mb-2">Submit</h1>
+			<form method="post">
+				{% csrf_token %}
 
-                <label for="{{ form.answer.id_for_label }}" class="sr-only">Answer:</label>
+				{{ form.non_field_errors }}
 
-                <div class="grid grid-cols-[1fr_auto] gap-2">
+				{{ form.answer.errors }}
+
+				<div class="grid grid-cols-[1fr_auto] gap-2 items-center">
                     {{ form.answer }}
                     <button type="submit" class="bg-wlblue text-white px-2 py-1 rounded-lg hover:bg-wlblue/80">
                         Go!
                     </button>
                 </div>
 
-                {% if solved and not success %}
-                <p class="text-green-300 mt-3">
-                    You've already solved this problem.
-                </p>
-                {% endif %} {% if user.is_anonymous %}
-                <p class="absolute inset-0 bg-slate-900/75 grid place-items-center text-center text-slate-300">
-                    <span>
-            <a href="{% url 'login' %}?next={{ request.path }}" class="underline text-slate-200">Log in</a>
-            or
-            <a href="{% url 'register' %}?next={{ request.path }}" class="underline text-slate-200">Register</a>
-            to submit solutions to this problem
-        </span>
-                </p>
-                {% endif %}
-            </form>
-        </div>
-
-    </div>
+				{% if success or solved %}
+				<p class="text-green-300 mt-3">
+					{% if success and solved %}
+					That's correct, but you've already solved this problem!
+					{% elif success %}
+					That's the right answer!
+					{% elif solved %}
+					You've already solved this problem.
+					{% endif %}
+				</p>
+				{% endif %}
+				{% if user.is_anonymous %}
+				<p class="absolute inset-0 bg-slate-900/75 grid place-items-center text-center text-slate-300">
+					<span>
+						<a href="{% url 'login' %}?next={{ request.path }}" class="underline text-slate-200">Log in</a>
+						or
+						<a href="{% url 'register' %}?next={{ request.path }}" class="underline text-slate-200">Register</a>
+						to submit solutions to this problem
+					</span>
+				</p>
+				{% endif %}
+			</form>
+		</div>
+	</div>
 </div>
 {% endblock content %}
