@@ -2,8 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db.models.base import Manager
 from django.db.models.functions import Now
-from .martor import MartorField
-# from martor.models import MartorField
+from .markdown import MartorField
 from . import consts
 
 class WlmathUserManager(UserManager):
@@ -17,11 +16,14 @@ class WlmathUser(AbstractUser):
 
 	points = models.IntegerField(default=0)
 	grade = models.CharField(max_length=20, blank=True)
-	problems_solved = models.ManyToManyField('Problem')
+	problems_solved = models.ManyToManyField("Problem")
 	# badges = models.ManyToManyField('Badge', blank=True)
 
 class ProblemManager(Manager):
 	pass
+
+# class Tag(models.Model):
+# 	"""A tag for a problem. Can be a topic, contest, or a category."""
 
 class Problem(models.Model):
 	objects = ProblemManager()
@@ -32,10 +34,11 @@ class Problem(models.Model):
 
 	answer = models.CharField(max_length=consts.ANSWER_MAX_LENGTH)
 	points = models.IntegerField()
-	category = models.CharField(max_length=32)
 
 	date_added = models.DateTimeField(auto_now_add=True)
 	date_modified = models.DateTimeField(auto_now=True)
+
+	# tags = models.ManyToManyField("Tag")
 
 	def url(self):
 		return f"/problems/{self.slug}/"

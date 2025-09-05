@@ -1,6 +1,22 @@
+/* miscellaneous fixes for martor's ui */
 .tab-martor-menu {
 	background: #fff !important;
 }
+.markdown-selector {
+	padding: 0.6em .5em !important;
+}
+.ace_editor {
+	height: 32rem !important;
+}
+:has(.ace_editor) {
+	width: 100% !important;
+}
+.main-martor {
+	max-width: 64rem;
+}
 body {
 	color: #000 !important;
+}
+mjx-container {
+	font-size: 1.25em !important;
 }

@@ -24,6 +24,10 @@ table {
 	border-collapse: separate;
 }
 
+math {
+	font-size: 1.2em;
+}
+
 .errorlist {
 	line-height: 1.3rem;
 	color: var(--color-red-300);
@@ -73,4 +77,3 @@ th.sortable.desc::after {
 		}
 	}
 }
-

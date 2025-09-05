@@ -11,7 +11,7 @@ jQuery(function ($) {
 			window.MathJax = {
 				tex: {
 					inlineMath: [
-						["~", "~"],
+						["$", "$"],
 						["\\(", "\\)"],
 					],
 				},

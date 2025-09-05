@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "dmoj_martor",
     "martor",
 ]
+
+MARTOR_ALTERNATIVE_JQUERY_JS_FILE = "noop.js"
 
 STATIC_ROOT = "static/"
 
