@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db.models.base import Manager
 from django.db.models.functions import Now
+from .martor import MartorField
+# from martor.models import MartorField
 from . import consts
 
 class WlmathUserManager(UserManager):
@@ -25,13 +27,13 @@ class Problem(models.Model):
 	objects = ProblemManager()
 
 	title = models.CharField(max_length=64)
-	body_text = models.TextField()
+	body = MartorField()
 	slug = models.CharField(max_length=16)
 
 	answer = models.CharField(max_length=consts.ANSWER_MAX_LENGTH)
 	points = models.IntegerField()
 	category = models.CharField(max_length=32)
- 
+
 	date_added = models.DateTimeField(auto_now_add=True)
 	date_modified = models.DateTimeField(auto_now=True)
 

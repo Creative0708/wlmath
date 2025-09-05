@@ -21,6 +21,8 @@ def problem(request, slug):
 
 	success = False
 	if request.method == "POST":
+		if user.is_anonymous:
+			return HttpResponse(status=403)
 		form = SubmitProblemForm(request.POST, problem=problem)
 		if form.is_valid():
 			success = True
@@ -48,16 +50,14 @@ class SubmitProblemForm(forms.Form):
 		return super().clean()
 
 def problem_list(request):
-    problems = Problem.objects.order_by("date_added")
+	problems = Problem.objects.order_by("date_added")
 
-    if request.user.is_authenticated:
-        # prefetch problems_solved for the current user
-        request.user.problems_solved.set(
-            request.user.problems_solved.all().select_related()
-        )
+	if request.user.is_authenticated:
+		problems_solved = request.user.problems_solved.all()
+	else:
+		problems_solved = set()
 
-    return render(request, "problemlist.html", {"problems": problems})
-
+	return render(request, "problemlist.html", { "problems": problems, "solved": problems_solved })
 
 class RegistrationForm(UserCreationForm):
 	password1, password2 = SetPasswordMixin.create_password_fields(label2="Confirm")

@@ -33,15 +33,18 @@ LOGIN_REDIRECT_URL = "/"
 # Application definition
 
 INSTALLED_APPS = [
+	"web",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "web",
-
+    "dmoj_martor",
+    "martor",
 ]
+
+STATIC_ROOT = "static/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
