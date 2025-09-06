@@ -2,6 +2,67 @@
 
 {% block content %}
 <div class="w-full h-full p-16 max-w-[64rem]">
-	<div class=
+	<div class="">
+		<h1 class="text-2xl mb-2 pb-2 border-wlblue border-b-4">
+			Leaderboard
+		</h1>
+		{% include "components/pagination.html" with id="leaderboard-pagination-2" item_name="users" has_next=data.pagination.has_next has_prev=data.pagination.has_prev start=data.pagination.start end=data.pagination.end total_items=data.pagination.total_items total_pages=data.pagination.total_pages current_page=data.pagination.page %}
+		<table class="w-full text-left border-collapse">
+			<thead class="bg-slate-800 text-slate-200 [&_th]:select-none [&_.ssf-sortable]:cursor-pointer">
+				<tr>
+					<th class="px-4 py-2 border-b2 border-wlblue">Rank</th>
+					<th class="px-4 py-2 border-b2 border-wlblue">Username</th>
+					<th data-column="points" class="px-4 py-2 border-b2 border-wlblue ssf-sortable">Points</th>
+					<th data-column="number_of_solved" class="px-4 py-2 border-b2 border-wlblue ssf-sortable">Problems</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for user in data.data %}
+				<tr class="hover:bg-slate-800 transition-colors duration-75">
+					<td class="px-4 py-2 border-b border-slate-700">
+						{{ user.rank }}
+					</td>
+					<td class="px-4 py-2 border-b border-slate-700">
+						{{ user.username }}
+					</td>
+					<td class="px-4 py-2 border-b border-slate-700">
+						{{ user.points }}
+					</td>
+					<td class="px-4 py-2 border-b border-slate-700">
+						{{ user.number_of_solved }}
+					</td>
+					<!-- {{ users.id }} -->
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		{% include "components/pagination.html" with id="leaderboard-pagination" item_name="users" has_next=data.pagination.has_next has_prev=data.pagination.has_prev start=data.pagination.start end=data.pagination.end total_items=data.pagination.total_items total_pages=data.pagination.total_pages current_page=data.pagination.page %}
+	</div>
 </div>
+
+<script>
+	document.querySelectorAll("th.ssf-sortable").forEach((header) => {
+
+		if (header.dataset.column == "{{ column }}") header.classList.add("{{ order }}")
+
+		header.addEventListener("click", () => {
+
+			const asc = !header.classList.contains("asc");
+			const title = header.dataset.column;
+
+			const params = new URLSearchParams(window.location.search);
+
+			params.set("column", title)
+			params.set("order", asc ? "asc" : "desc")
+
+			const el = document.createElement("a")
+			el.href = `?${params.toString()}`
+			el.click()
+			
+			header.classList.toggle("asc", asc);
+			header.classList.toggle("desc", !asc);
+		});
+	});
+</script>
 {% endblock content %}

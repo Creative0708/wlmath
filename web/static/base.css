@@ -4,6 +4,8 @@
 
 @theme {
 	--color-wlblue: #3a559c;
+	--color-neonpink: #FF10F0;
+	--color-muted: #A9A9A9;
 }
 
 :root {
@@ -31,15 +33,23 @@ table {
 }
 
 
-th.sortable.asc::after {
+th.sortable.asc::after, th.ssf-sortable.asc::after {
   content: " ▲";
   @apply text-slate-400;
 }
 
-th.sortable.desc::after {
+th.sortable.desc::after, th.ssf-sortable.desc::after {
   content: " ▼";
   @apply text-slate-400;
 }
+
+th.sortable:not(.desc):not(.asc)::after, th.ssf-sortable:not(.desc):not(.asc)::after {
+  content: " ▼";
+  color: transparent;
+  opacity: 0;
+  /* @apply text-slate-400; */
+}
+
 
 .password-visibility-container {
 	position: relative;
