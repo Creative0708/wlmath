@@ -14,6 +14,7 @@ for (const input of inputs) {
 	input.parentElement.replaceChild(container, input);
 	container.append(input, visibilityButton);
 }
+
 document.querySelectorAll("th.sortable").forEach((header) => {
   header.addEventListener("click", () => {
 	const table = header.closest("table");

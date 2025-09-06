@@ -1,0 +1,108 @@
+<div id="{{ id }}">
+	<div class="flex justify-between px-4 my-2">
+		<p>Showing {{ start }} to {{ end }} of {{ total_items }} {{ item_name }}</p>
+
+		<div class="space-x-2 flex [&>a:not(.cursor-not-allowed)]:cursor-pointer">
+		</div>
+	</div>
+
+	<script>
+
+		function setURL(page) {
+			const params = new URLSearchParams(window.location.search);
+
+			params.set("page", page)
+
+			return `?${params.toString()}`			
+		}
+
+		function loadPagination() {
+			let total_pages = parseInt("{{ total_pages }}") // So my code editor can be happy
+			let current_page = parseInt("{{ current_page }}")
+
+			if (total_pages == 1) return
+
+			let has_next = "{{ has_next }}" === "True"
+			let has_prev = "{{ has_prev }}" === "True"
+
+			// Bootleg React Code Go Brrrrr
+
+			let parent = document.getElementById("{{ id }}").children[0]
+
+			let pagination = parent.children[1]
+
+			let prev = document.createElement("a")
+			prev.innerHTML = "Prev"
+
+			if (!has_prev) {
+				prev.classList.add("text-muted")
+				prev.classList.add("cursor-not-allowed")
+			} else {
+				
+				prev.href = setURL(current_page - 1)
+			}
+
+			let next = document.createElement("a")
+			next.innerHTML = "Next"
+
+			if (!has_next) {
+				next.classList.add("text-muted")
+				next.classList.add("cursor-not-allowed")
+			} else {
+				next.href = setURL(current_page + 1)
+			}
+
+			pagination.appendChild(prev)
+
+			let el = document.createElement("a")
+			el.innerHTML = `${1}`
+			el.href = setURL(1)
+
+
+			el.classList.add("underline")
+
+			if (current_page == 1) el.classList.add("text-neonpink")
+
+			pagination.appendChild(el)
+
+			if (Math.max(2, current_page - 2) > 2) {
+				let el = document.createElement("p")
+				el.innerText = "..."
+				pagination.appendChild(el)
+			}
+
+			for (let i = Math.max(2, current_page - 2); i <= Math.min(total_pages - 1, current_page + 2); i++) {
+				let el = document.createElement("a")
+				el.innerHTML = `${i}`
+				el.href = setURL(i)
+
+				if (i == current_page) el.classList.add("text-neonpink")
+
+				el.classList.add("underline")
+
+				pagination.appendChild(el)
+			}
+
+			if (Math.min(total_pages, current_page + 2) < total_pages - 1) {
+				let el = document.createElement("p")
+				el.innerText = "..."
+				pagination.appendChild(el)
+			}
+
+			el = document.createElement("a")
+			el.innerHTML = `${total_pages}`
+			el.href = setURL(total_pages)
+
+			el.classList.add("underline")
+
+			if (current_page == total_pages) el.classList.add("text-neonpink")
+
+			pagination.appendChild(el)
+
+			pagination.appendChild(next)
+		}
+
+		loadPagination()
+	</script>
+
+</div>
