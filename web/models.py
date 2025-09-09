@@ -21,6 +21,13 @@ class WlmathUser(AbstractUser):
 class ProblemManager(Manager):
 	pass
 
+class Tag(models.Model):
+    contraction = models.CharField(max_length=8, unique=True)
+    name = models.CharField(max_length=32)
+    
+    def __str__(self):
+        return self.name
+    
 class Problem(models.Model):
 	objects = ProblemManager()
 
@@ -30,11 +37,12 @@ class Problem(models.Model):
 
 	answer = models.CharField(max_length=consts.ANSWER_MAX_LENGTH)
 	points = models.IntegerField()
-	category = models.CharField(max_length=32)
+	tags = models.ManyToManyField(Tag, related_name="problems")
  
 	date_added = models.DateTimeField(auto_now_add=True)
 	date_modified = models.DateTimeField(auto_now=True)
 
+ 
 	def url(self):
 		return f"/problems/{self.slug}/"
 
