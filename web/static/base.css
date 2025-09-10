@@ -7,6 +7,11 @@
 	--color-muted: #A9A9A9;
 	--font-sans: "Ubuntu", sans-serif;
 }
+.icon {
+	font: 1.2em "Material Symbols Outlined";
+	vertical-align: sub;
+	line-height: 0;
+}
 @import "tailwindcss";
 
 summary{

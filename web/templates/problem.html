@@ -24,10 +24,9 @@
 	<div class="generic-container grow">
 		<h1 class="text-5xl font-bold mb-4">
 			{% if solved %}
-			<svg class="inline size-12" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-				<path class="fill-green-300" d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-			</svg>
-			{% endif %} {{ problem.title }}
+			<span class="text-green-300 icon">&#xe5ca;</span>
+			{% endif %}
+			{{ problem.title }}
 		</h1>
 		<hr class="border-2 border-wlblue my-4" />
 		<p>{{ problem.body | markdownify }}</p>
