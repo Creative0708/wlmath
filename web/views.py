@@ -64,7 +64,6 @@ def problem_list(request):
 	return render(request, "problemlist.html", { "problems": problems, "solved": problems_solved })
 
 def users(request):
-
 	page_limit = 50
 
 	try:
