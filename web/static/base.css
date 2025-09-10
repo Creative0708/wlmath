@@ -4,8 +4,10 @@
 
 @theme {
 	--color-wlblue: #3a559c;
-	--color-neonpink: #FF10F0;
+n	--color-accent: #49EFFF;
 	--color-muted: #A9A9A9;
+	--color-deep-muted: #474747;
+	--font-ubunutu: "Ubuntu", sans-serif;
 }
 
 :root {

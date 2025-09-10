@@ -15,6 +15,9 @@ class WlmathUser(AbstractUser):
 
 	points = models.IntegerField(default=0)
 	grade = models.CharField(max_length=20, blank=True)
+
+	bio = models.TextField(max_length=5000, blank=True)
+
 	problems_solved = models.ManyToManyField('Problem')
 	# badges = models.ManyToManyField('Badge', blank=True)
 

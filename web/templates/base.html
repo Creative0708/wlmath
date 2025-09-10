@@ -23,8 +23,8 @@
 			<a href="{% url 'login' %}?next={{ request.path }}" class="ml-auto">login</a>
 			{% else %}
 			<div class="ml-auto pr-24 relative">
-				<span class="text-slate-300">
-					Welcome, {{ user.username }}!
+				<span class="text-slate-300 mr-4">
+					Welcome, <a href="/user" class="hover:text-accent">{{ user.username }}!</a>
 				</span>
 				<details class="absolute right-0 top-0 text-right bg-transparent open:bg-slate-900/75 duration-150 p-4 w-28 m-[-1rem] select-none">
 					<summary class="in-open:text-slate-400 in-open:mb-2 not-in-open:hover:underline ease-out transition-[margin,background-color] cursor-pointer" onblur="setTimeout(() => event.target.parentElement.open = false, 100)">logout</summary>
