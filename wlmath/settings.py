@@ -33,15 +33,19 @@ LOGIN_REDIRECT_URL = "/"
 # Application definition
 
 INSTALLED_APPS = [
+	"web",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "web",
-
+    "martor",
 ]
+
+MARTOR_ALTERNATIVE_JQUERY_JS_FILE = "noop.js"
+
+STATIC_ROOT = "static/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

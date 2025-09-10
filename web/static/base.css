@@ -1,16 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
-@import "tailwindcss";
 
 @theme {
 	--color-wlblue: #3a559c;
 	--color-neonpink: #FF10F0;
 	--color-muted: #A9A9A9;
+	--font-sans: "Ubuntu", sans-serif;
 }
-
-:root {
-	font-family: "Ubuntu", sans-serif;
-}
+@import "tailwindcss";
 
 summary{
 	display: block;
@@ -30,6 +27,10 @@ table {
 	border-collapse: separate;
 }
 
+math {
+	font-size: 1.2em;
+}
+
 .errorlist {
 	line-height: 1.3rem;
 	color: var(--color-red-300);
@@ -47,13 +48,15 @@ th.sortable.desc::after, th.ssf-sortable.desc::after {
   @apply text-slate-400;
 }
 
-th.sortable:not(.desc):not(.asc)::after, th.ssf-sortable:not(.desc):not(.asc)::after {
-  content: " ▼";
-  color: transparent;
-  opacity: 0;
-  /* @apply text-slate-400; */
+.generic-container {
+	@apply bg-slate-900 p-4 border-b-4 border-wlblue w-full;
+	> h1 {
+		@apply font-bold mb-2;
+	}
+	a {
+		@apply underline text-slate-200
+	}
 }
-
 
 .password-visibility-container {
 	position: relative;
@@ -87,4 +90,3 @@ th.sortable:not(.desc):not(.asc)::after, th.ssf-sortable:not(.desc):not(.asc)::a
 		}
 	}
 }
-

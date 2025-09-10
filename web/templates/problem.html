@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load markdown %}
 
 {% block head %}
 {% if success %}
@@ -19,8 +20,8 @@
 {% endblock head %}
 
 {% block content %}
-<div class="w-full grow flex gap-6 lg:px-36">
-	<div class="bg-slate-900 p-4 border-b-4 border-wlblue grow">
+<div class="w-full grow flex gap-6 lg:px-36 not-md:contents">
+	<div class="generic-container grow">
 		<h1 class="text-5xl font-bold mb-4">
 			{% if solved %}
 			<svg class="inline size-12" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
@@ -29,13 +30,13 @@
 			{% endif %} {{ problem.title }}
 		</h1>
 		<hr class="border-2 border-wlblue my-4" />
-		<p>{{ problem.body_text }}</p>
+		<p>{{ problem.body | markdownify }}</p>
 	</div>
 
 	{# sidebar #}
-	<div class="flex flex-col">
-		<div class="self-start bg-slate-900 p-4 border-b-4 border-wlblue relative w-64 leading-5">
-			<h1 class="text-2xl font-bold mb-2">Submit</h1>
+	<div class="flex flex-col gap-6 not-md:w-64">
+		<div class="self-start generic-container items-stretch relative w-64 leading-5">
+			<h1 class="text-2xl">Submit</h1>
 			<form method="post">
 				{% csrf_token %}
 
@@ -62,17 +63,23 @@
 				</p>
 				{% endif %}
 				{% if user.is_anonymous %}
-				<p class="absolute inset-0 bg-slate-900/75 grid place-items-center text-center text-slate-300">
+				<p class="absolute inset-0 bg-slate-900/75 grid place-items-center text-center text-slate-300 px-4">
 					<span>
-						<a href="{% url 'login' %}?next={{ request.path }}" class="underline text-slate-200">Log in</a>
+						<a href="{% url 'login' %}?next={{ request.path }}">Log in</a>
 						or
-						<a href="{% url 'register' %}?next={{ request.path }}" class="underline text-slate-200">Register</a>
+						<a href="{% url 'register' %}?next={{ request.path }}">Register</a>
 						to submit solutions to this problem
 					</span>
 				</p>
 				{% endif %}
 			</form>
 		</div>
+		{% if user.is_superuser %}
+		<div class="generic-container">
+			<h1 class="text-2xl">Admin</h1>
+			<a href="/admin/web/problem/{{ problem.id }}/change/">Edit problem</a>
+		</div>
+		{% endif %}
 	</div>
 </div>
 {% endblock content %}
