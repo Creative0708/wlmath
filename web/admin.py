@@ -16,8 +16,8 @@ class WlmathUserAdmin(UserAdmin):
 	list_filter = ("grade",)
 
 	fieldsets = (
-		("Profile", {"fields": ("username", "email", "password", "grade", "bio", "points" , "problems_solved")}),
-	)   
+		("Profile", {"fields": ("username", "email", "password", "grade", "bio", "points")}),
+	)
 
 	add_fieldsets = (
 		(None, {

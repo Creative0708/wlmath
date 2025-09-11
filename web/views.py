@@ -39,7 +39,7 @@ def problem(request, slug):
 				request.user.problems_solved.add(problem)
 	else:
 		form = SubmitProblemForm(problem=problem)
-	
+
 	return render(request, "problem.html", {
 		"problem": problem,
 		"form": form,
@@ -56,7 +56,7 @@ class SubmitProblemForm(forms.Form):
 
 	def clean(self):
 		if not self.errors and self.cleaned_data.get("answer") != self.problem.answer:
-			self.add_error("answer", f"[testing] answer is {self.problem.answer}")
+			self.add_error("answer", f"That's not the right answer.")
 		return super().clean()
 
 def problem_list(request):
@@ -138,7 +138,7 @@ class RegistrationView(CreateView):
 class EditUserProfile(forms.Form):
 	bio = forms.CharField(max_length=consts.PROFILE_BIO_LIMIT,
 							 widget=forms.Textarea(attrs={"class": "w-full border border-wlblue p-2 rounded-sm focus:outline-none"}))
-	
+
 	grade = forms.CharField(max_length=20,
 							 widget=forms.TextInput(attrs={"class": "w-30 !border-wlblue border px-2 rounded-sm focus:outline-none"}))
 
@@ -156,7 +156,7 @@ def user_self_edit(request):
 
 	if not req_user.is_authenticated:
 		return redirect(reverse_lazy('login'))
-	
+
 	profile = get_object_or_404(User, username=req_user.username)
 	email_hash = sha256(profile.email.encode('utf-8')).hexdigest()
 
@@ -165,7 +165,7 @@ def user_self_edit(request):
 		if form.is_valid():
 			profile.bio = form.cleaned_data['bio']
 			profile.grade = form.cleaned_data['grade']
-			profile.save() 
+			profile.save()
 
 			return redirect(reverse_lazy('profile_self'))
 	else:
@@ -202,7 +202,7 @@ def user(request, username):
 	problems_solved = profile.problems_solved.all().order_by("-points")[:25]
 
 	grade = profile.grade
-	
+
 	if grade == "" or grade == None:
 		grade = "N/A"
 

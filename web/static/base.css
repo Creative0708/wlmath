@@ -24,6 +24,12 @@ input {
 	border: 1px solid var(--color-slate-600);
 	border-radius: 0.25rem;
 	height: 1.5em;
+
+	&:focus {
+		outline: none;
+		border-color: var(--color-slate-500);
+		background: var(--color-slate-800);
+	}
 }
 
 table {
