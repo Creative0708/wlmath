@@ -154,16 +154,6 @@ class EditUserProfile(forms.Form):
 			self.fields['bio'].initial = user_data['bio']
 			self.fields['grade'].inital_grade = user_data['grade']
 
-	def clean(self):
-		if not self.errors:
-			if len(self.cleaned_data.get("grade")) > 20:
-				self.add_error(
-					"grade", "text must be less than 21")
-			elif len(self.cleaned_data.get("grade")) > consts.PROFILE_BIO_LIMIT:
-				self.add_error(
-					"bio", f"text must be less than {consts.PROFILE_BIO_LIMIT + 1}")
-		return super().clean()
-
 def user_self_edit(request):
 
 	req_user = request.user
