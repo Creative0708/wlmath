@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="w-full">
+    <div>
+        <div class="border-wlblue border-b-4 my-4 pb-2 flex items-center">
+            <img src="https://www.gravatar.com/avatar/{{ email_hash }}?d=identicon" class="mx-4 w-10 h-10 rounded-sm">
+            <p class="text-2xl">{{ username }} - Edit Profile</p>
+        </div>
+        <div>
+            <form method="post" class="space-y-2">
+				{% csrf_token %}
+
+				{{ form.non_field_errors }}
+
+                <div class="text-xl space-y-2">
+                    {{ form.bio.errors }}
+                    <p>Bio (5000 max.)</p>
+                    {{ form.bio }}
+                </div>
+
+                {{ form.grade.errors }}
+                <div class="flex space-x-4 text-xl">
+                    <p>Grade: </p>
+                    {{ form.grade }}
+                </div>
+
+                <button type="submit" class="bg-wlblue text-white px-2 py-1 rounded-lg hover:bg-wlblue/80">
+					Update Profile
+				</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

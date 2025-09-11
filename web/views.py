@@ -139,6 +139,62 @@ class RegistrationView(CreateView):
 	success_url = reverse_lazy("login")
 	template_name = "registration/register.html"
 
+class EditUserProfile(forms.Form):
+	bio = forms.CharField(max_length=consts.PROFILE_BIO_LIMIT,
+							 widget=forms.Textarea(attrs={"class": "w-full border border-wlblue p-2 rounded-sm focus:outline-none"}))
+	
+	grade = forms.CharField(max_length=20,
+							 widget=forms.TextInput(attrs={"class": "w-30 !border-wlblue border px-2 rounded-sm focus:outline-none"}))
+
+	def __init__(self, *args, **kwargs) -> None:
+		user_data = kwargs.pop('user_data', None)
+		super().__init__(*args, **kwargs)
+
+		if user_data:
+			self.fields['bio'].initial = user_data['bio']
+			self.fields['grade'].inital_grade = user_data['grade']
+
+	def clean(self):
+		if not self.errors:
+			if len(self.cleaned_data.get("grade")) > 20:
+				self.add_error(
+					"grade", "text must be less than 21")
+			elif len(self.cleaned_data.get("grade")) > consts.PROFILE_BIO_LIMIT:
+				self.add_error(
+					"bio", f"text must be less than {consts.PROFILE_BIO_LIMIT + 1}")
+		return super().clean()
+
+def user_self_edit(request):
+
+	req_user = request.user
+
+	if not req_user.is_authenticated:
+		return redirect(reverse_lazy('login'))
+	
+	profile = get_object_or_404(User, username=req_user.username)
+	email_hash = sha256(profile.email.encode('utf-8')).hexdigest()
+
+	if request.method == "POST":
+		form = EditUserProfile(request.POST)
+		if form.is_valid():
+			profile.bio = form.cleaned_data['bio']
+			profile.grade = form.cleaned_data['grade']
+			profile.save() 
+
+			return redirect(reverse_lazy('profile_self'))
+	else:
+		form = EditUserProfile(user_data={
+			"bio": profile.bio,
+			"grade": profile.grade
+		})
+
+	return render(request, "user_edit.html", {
+		"bio": profile.bio,
+		"grade": profile.grade,
+		"username": profile.username,
+		"email_hash": email_hash,
+		"form": form
+	})
 
 def user_self(request):
 
@@ -173,4 +229,28 @@ def user(request, username):
 		"rank": rank,
 		"problems_solved": problems_solved,
 		"bio": profile.bio
+	})
+
+def user_self_problems(request):
+
+	req_user = request.user
+
+	if not req_user.is_authenticated:
+		return redirect(reverse_lazy('login'))
+
+	return user_problems(request, req_user.username)
+
+
+def user_problems(request, username):
+
+	profile = get_object_or_404(User, username=username)
+
+	email_hash = sha256(profile.email.encode('utf-8')).hexdigest()
+	problems_solved = profile.problems_solved.all().order_by("-points")
+
+	return render(request, "user_problems.html", {
+		"username": username,
+		"email_hash": email_hash,
+		"points": profile.points,
+		"problems_solved": problems_solved,
 	})
