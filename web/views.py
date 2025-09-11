@@ -18,7 +18,8 @@ User = get_user_model()
 def index(request):
 	recent_problems = Problem.objects.order_by("date_added")[:8]
 
-	return render(request, "index.html", { "problems": recent_problems })
+	return render(request, "index.html", {"problems": recent_problems})
+
 
 def problem(request, slug):
 	user = request.user
@@ -31,13 +32,14 @@ def problem(request, slug):
 		if user.is_anonymous:
 			return HttpResponse(status=403)
 
-    form = SubmitProblemForm(request.POST, problem=problem)
+		form = SubmitProblemForm(request.POST, problem=problem)
 		if form.is_valid():
 			success = True
 			if not solved:
 				request.user.problems_solved.add(problem)
 	else:
 		form = SubmitProblemForm(problem=problem)
+	
 	return render(request, "problem.html", {
 		"problem": problem,
 		"form": form,
