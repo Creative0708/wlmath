@@ -1,21 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="w-full h-full p-16 max-w-[64rem]">
-	<div class="bg-slate-900 p-4 border-b-4 border-wlblue">
-		<h1 class="text-5xl font-bold mb-4">Problem list</h1>
-		<p>
-			Filters: TODO
-		</p>
-	</div>
+<div class="bg-slate-900 p-4 border-b-4 border-wlblue">
+	<h1 class="text-5xl font-bold mb-4">Problem list</h1>
+	<p>
+		Filters: TODO
+	</p>
+</div>
 
-	{# TODO: infinite scrolling/pagination #}
-	<ul class="flex flex-row gap-8 my-8">
+{# TODO: infinite scrolling/pagination #}
+<ul class="grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] justify-stretch gap-8 my-8">
 	{% for problem in problems %}
-	<li>
-		<a class="flex flex-col justify-center bg-slate-900 hover:bg-slate-800 transition-colors duration-75 border-b-4 border-wlblue px-4 py-2 w-64 h-24" href="{{ problem.url }}" class="">
+	<li class="h-24">
+		<a class="flex flex-col justify-center bg-slate-900 hover:bg-slate-800 transition-colors duration-75 border-b-4 border-wlblue px-4 py-2 w-full h-full" href="{{ problem.url }}" class="">
 			<h1 class="text-xl font-bold">
-				{% if solved %}
+				{% if problem in solved %}
 				<span class="text-green-300 icon font-bold mr-0.5">&#xe5ca;</span>
 				{% endif %}
 				{{ problem.title }}
@@ -28,5 +27,4 @@
 	</li>
 	{% endfor %}
 </ul>
-</div>
 {% endblock content %}
