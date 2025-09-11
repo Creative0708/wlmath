@@ -3,6 +3,12 @@ from django.contrib.admin.sites import ModelAdmin
 from django.contrib.auth.admin import UserAdmin
 from .models import Problem, WlmathUser, Tag
 
+class WlmathModelAdmin(admin.ModelAdmin):
+	class Media:
+		css = {
+			"all": ("admin.css",)
+		}
+
 class WlmathUserAdmin(UserAdmin):
 	model = WlmathUser
 

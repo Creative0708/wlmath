@@ -23,8 +23,11 @@
 			<a href="{% url 'login' %}?next={{ request.path }}" class="ml-auto">login</a>
 			{% else %}
 			<div class="ml-auto pr-24 relative">
-				<span class="text-slate-300 mr-4">
+				<span class="text-slate-300">
 					Welcome, <a href="/user" class="hover:text-accent">{{ user.username }}!</a>
+					{% if user.is_superuser %}
+					<a href="/admin/" class="underline mx-4">admin</a>
+					{% endif %}
 				</span>
 				<details class="absolute right-0 top-0 text-right bg-transparent open:bg-slate-900/75 duration-150 p-4 w-28 m-[-1rem] select-none">
 					<summary class="in-open:text-slate-400 in-open:mb-2 not-in-open:hover:underline ease-out transition-[margin,background-color] cursor-pointer" onblur="setTimeout(() => event.target.parentElement.open = false, 100)">logout</summary>
@@ -37,9 +40,8 @@
 			</div>
 			{% endif %}
 		</nav>
-		<main class="flex items-center flex-col grow p-16">
+		<main class="flex items-center flex-col grow py-16 md:px-16 gap-4">
 			{% block content %}{% endblock %}
 		</main>
 	</body>
 </html>
-

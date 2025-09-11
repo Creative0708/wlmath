@@ -17,8 +17,8 @@ User = get_user_model()
 
 def index(request):
 	recent_problems = Problem.objects.order_by("date_added")[:8]
-	return render(request, "index.html", {"problems": recent_problems})
 
+	return render(request, "index.html", { "problems": recent_problems })
 
 def problem(request, slug):
 	user = request.user
@@ -27,7 +27,11 @@ def problem(request, slug):
 
 	success = False
 	if request.method == "POST":
-		form = SubmitProblemForm(request.POST, problem=problem)
+
+		if user.is_anonymous:
+			return HttpResponse(status=403)
+
+    form = SubmitProblemForm(request.POST, problem=problem)
 		if form.is_valid():
 			success = True
 			if not solved:
@@ -41,10 +45,8 @@ def problem(request, slug):
 		"solved": solved,
 	})
 
-
 class SubmitProblemForm(forms.Form):
-	answer = forms.CharField(max_length=consts.ANSWER_MAX_LENGTH,
-							 widget=forms.TextInput(attrs={"class": "w-full"}))
+	answer = forms.CharField(max_length=consts.ANSWER_MAX_LENGTH, widget=forms.TextInput(attrs={ "class": "w-full" }))
 
 	def __init__(self, *args, problem: Problem, **kwargs) -> None:
 		self.problem = problem
@@ -52,25 +54,19 @@ class SubmitProblemForm(forms.Form):
 
 	def clean(self):
 		if not self.errors and self.cleaned_data.get("answer") != self.problem.answer:
-			self.add_error(
-				"answer", f"[testing] answer is {self.problem.answer}")
+			self.add_error("answer", f"[testing] answer is {self.problem.answer}")
 		return super().clean()
-
 
 def problem_list(request):
 	problems = Problem.objects.order_by("date_added")
 
 	if request.user.is_authenticated:
-		# prefetch problems_solved for the current user
-		request.user.problems_solved.set(
-			request.user.problems_solved.all().select_related()
-		)
-
-	return render(request, "problemlist.html", {"problems": problems})
-
+		problems_solved = request.user.problems_solved.all()
+	else:
+		problems_solved = set()
+	return render(request, "problemlist.html", { "problems": problems, "solved": problems_solved })
 
 def users(request):
-
 	page_limit = 50
 
 	try:
@@ -101,8 +97,7 @@ def users(request):
 
 	page_obj = paginator.get_page(page)
 
-	page_data = page_obj.object_list.values(
-		"username", "points", "id", "number_of_solved", "rank")
+	page_data = page_obj.object_list.values("username", "points", "id", "number_of_solved", "rank")
 
 	data = {
 		"data": page_data,
@@ -122,7 +117,6 @@ def users(request):
 		"column": column,
 		"order": order,
 	})
-
 
 class RegistrationForm(UserCreationForm):
 	password1, password2 = SetPasswordMixin.create_password_fields(

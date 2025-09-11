@@ -10,7 +10,8 @@ urlpatterns = [
 	path("accounts/", include("django.contrib.auth.urls")),
 	path("user/<str:username>/problems", views.user_problems, name="profile_problems"),
 	path("user/problems", views.user_self_problems, name="profile_self_problems"),
-    path("user/edit", views.user_self_edit, name="profile_self_edit"),
+  path("user/edit", views.user_self_edit, name="profile_self_edit"),
 	path("user/<str:username>/", views.user, name="profile"),
 	path("user/", views.user_self, name="profile_self"),
+	path("martor/", include("martor.urls"))
 ]
