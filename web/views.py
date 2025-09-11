@@ -5,19 +5,21 @@ from django.contrib.auth.forms import SetPasswordMixin, UserCreationForm
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from django.core.serializers import serialize
 from django.db.models import F, Window, Count
 from django.db.models.functions import Rank
 from django.core.paginator import Paginator
 from . import consts
-import json
+from hashlib import sha256
 
 from web.models import Problem
 User = get_user_model()
 
+
 def index(request):
 	recent_problems = Problem.objects.order_by("date_added")[:8]
-	return render(request, "index.html", { "problems": recent_problems })
+
+	return render(request, "index.html", {"problems": recent_problems})
+
 
 def problem(request, slug):
 	user = request.user
@@ -26,8 +28,10 @@ def problem(request, slug):
 
 	success = False
 	if request.method == "POST":
+
 		if user.is_anonymous:
 			return HttpResponse(status=403)
+
 		form = SubmitProblemForm(request.POST, problem=problem)
 		if form.is_valid():
 			success = True
@@ -35,6 +39,7 @@ def problem(request, slug):
 				request.user.problems_solved.add(problem)
 	else:
 		form = SubmitProblemForm(problem=problem)
+	
 	return render(request, "problem.html", {
 		"problem": problem,
 		"form": form,
@@ -116,13 +121,122 @@ def users(request):
 	})
 
 class RegistrationForm(UserCreationForm):
-	password1, password2 = SetPasswordMixin.create_password_fields(label2="Confirm")
+	password1, password2 = SetPasswordMixin.create_password_fields(
+		label2="Confirm")
+
 	class Meta:
 		model = User
 		fields = ("username",)
+
 
 class RegistrationView(CreateView):
 	form_class = RegistrationForm
 
 	success_url = reverse_lazy("login")
 	template_name = "registration/register.html"
+
+class EditUserProfile(forms.Form):
+	bio = forms.CharField(max_length=consts.PROFILE_BIO_LIMIT,
+							 widget=forms.Textarea(attrs={"class": "w-full border border-wlblue p-2 rounded-sm focus:outline-none"}))
+	
+	grade = forms.CharField(max_length=20,
+							 widget=forms.TextInput(attrs={"class": "w-30 !border-wlblue border px-2 rounded-sm focus:outline-none"}))
+
+	def __init__(self, *args, **kwargs) -> None:
+		user_data = kwargs.pop('user_data', None)
+		super().__init__(*args, **kwargs)
+
+		if user_data:
+			self.fields['bio'].initial = user_data['bio']
+			self.fields['grade'].inital_grade = user_data['grade']
+
+def user_self_edit(request):
+
+	req_user = request.user
+
+	if not req_user.is_authenticated:
+		return redirect(reverse_lazy('login'))
+	
+	profile = get_object_or_404(User, username=req_user.username)
+	email_hash = sha256(profile.email.encode('utf-8')).hexdigest()
+
+	if request.method == "POST":
+		form = EditUserProfile(request.POST)
+		if form.is_valid():
+			profile.bio = form.cleaned_data['bio']
+			profile.grade = form.cleaned_data['grade']
+			profile.save() 
+
+			return redirect(reverse_lazy('profile_self'))
+	else:
+		form = EditUserProfile(user_data={
+			"bio": profile.bio,
+			"grade": profile.grade
+		})
+
+	return render(request, "user_edit.html", {
+		"bio": profile.bio,
+		"grade": profile.grade,
+		"username": profile.username,
+		"email_hash": email_hash,
+		"form": form
+	})
+
+def user_self(request):
+
+	req_user = request.user
+
+	if not req_user.is_authenticated:
+		return redirect(reverse_lazy('login'))
+
+	return user(request, req_user.username)
+
+
+def user(request, username):
+
+	profile = get_object_or_404(User, username=username)
+
+	email_hash = sha256(profile.email.encode('utf-8')).hexdigest()
+	num_problems_solved = profile.problems_solved.count()
+	rank = User.objects.filter(points__gt=profile.points).count() + 1
+	problems_solved = profile.problems_solved.all().order_by("-points")[:25]
+
+	grade = profile.grade
+	
+	if grade == "" or grade == None:
+		grade = "N/A"
+
+	return render(request, "user.html", {
+		"username": username,
+		"email_hash": email_hash,
+		"num_problems_solved": num_problems_solved,
+		"grade": grade,
+		"points": profile.points,
+		"rank": rank,
+		"problems_solved": problems_solved,
+		"bio": profile.bio
+	})
+
+def user_self_problems(request):
+
+	req_user = request.user
+
+	if not req_user.is_authenticated:
+		return redirect(reverse_lazy('login'))
+
+	return user_problems(request, req_user.username)
+
+
+def user_problems(request, username):
+
+	profile = get_object_or_404(User, username=username)
+
+	email_hash = sha256(profile.email.encode('utf-8')).hexdigest()
+	problems_solved = profile.problems_solved.all().order_by("-points")
+
+	return render(request, "user_problems.html", {
+		"username": username,
+		"email_hash": email_hash,
+		"points": profile.points,
+		"problems_solved": problems_solved,
+	})

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="w-full">
+	<div class="flex space-x-4">
+		<div>
+			<img src="https://www.gravatar.com/avatar/{{ email_hash }}?d=identicon" class="w-30 h-30">
+		</div>
+		<div class="flex items-center justify-between grow px-4">
+			<div>
+				<p class="text-3xl">
+					{{ username }}
+				</p>
+				<p>
+					{% if num_problems_solved > 1 %}
+						{{ num_problems_solved }} Problems Solved
+					{% else %}
+						{{ num_problems_solved }} Problem Solved
+					{% endif %}
+				</p>
+				<p>
+					Grade: {{ grade }}
+				</p>
+			</div>
+			<div class="text-3xl font-bold pr-10 text-right">
+				<p>
+					{{ points }} Points
+					<br>
+					Rank #{{ rank }}
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="grid grid-cols-2 gap-4">
+		<div> <!-- User's Bio -->
+			<div class="border-wlblue border-b-4 my-4 pb-2 flex justify-between items-center">
+				<p class=" text-2xl">Bio</p>
+				<a href="./edit" class="pr-4 hover:text-accent">Edit Profile >>></a>
+			</div>
+			<pre class="text-xl px-4 font-sans whitespace-pre-wrap break-words">{{ bio }}</pre>
+		</div>
+		<div> <!-- Problems Section -->
+			<div class="border-wlblue border-b-4 my-4 pb-2 flex justify-between items-center">
+				<p class="text-2xl">Problems Solved</p>
+				<a href="./problems" class="pr-4 hover:text-accent">View All >>></a>
+			</div>
+			<div class="space-y-2">
+				{% for problem in problems_solved %}
+				<a class="flex justify-around items-center px-4" href="problems/{{ problem.slug }}">
+					<div>
+						<p class="text-xl">
+							{{ problem.title }}
+						</p>
+						<!-- Think about doing when you solved the problem in the future -->
+						<!-- <p class="text-muted text-sm">
+								{{ problem.date_added | date:"Y/m/d" }}
+							</p> -->
+					</div>
+					<hr class="mx-4 flex-1  text-deep-muted">
+					<p class="text-xl w-max">
+						{{ problem.points }} pts
+					</p>
+				</a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

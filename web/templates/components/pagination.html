@@ -61,7 +61,7 @@
 
 			el.classList.add("underline")
 
-			if (current_page == 1) el.classList.add("text-neonpink")
+			if (current_page == 1) el.classList.add("text-accent")
 
 			pagination.appendChild(el)
 
@@ -76,7 +76,7 @@
 				el.innerHTML = `${i}`
 				el.href = setURL(i)
 
-				if (i == current_page) el.classList.add("text-neonpink")
+				if (i == current_page) el.classList.add("text-accent")
 
 				el.classList.add("underline")
 
@@ -95,7 +95,7 @@
 
 			el.classList.add("underline")
 
-			if (current_page == total_pages) el.classList.add("text-neonpink")
+			if (current_page == total_pages) el.classList.add("text-accent")
 
 			pagination.appendChild(el)
 

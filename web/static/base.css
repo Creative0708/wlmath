@@ -3,10 +3,12 @@
 
 @theme {
 	--color-wlblue: #3a559c;
-	--color-neonpink: #FF10F0;
+	--color-accent: #49EFFF;
 	--color-muted: #A9A9A9;
+	--color-deep-muted: #474747;
 	--font-sans: "Ubuntu", sans-serif;
 }
+
 .icon {
 	font: 1.2em "Material Symbols Outlined";
 	vertical-align: sub;

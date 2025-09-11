@@ -7,13 +7,13 @@
 			Leaderboard
 		</h1>
 		{% include "components/pagination.html" with id="leaderboard-pagination-2" item_name="users" has_next=data.pagination.has_next has_prev=data.pagination.has_prev start=data.pagination.start end=data.pagination.end total_items=data.pagination.total_items total_pages=data.pagination.total_pages current_page=data.pagination.page %}
-		<table class="w-full text-left border-collapse">
+		<table class="w-full text-left border-collapse overflow-auto">
 			<thead class="bg-slate-800 text-slate-200 [&_th]:select-none [&_.ssf-sortable]:cursor-pointer">
 				<tr>
-					<th class="px-4 py-2 border-b2 border-wlblue">Rank</th>
-					<th class="px-4 py-2 border-b2 border-wlblue">Username</th>
-					<th data-column="points" class="px-4 py-2 border-b2 border-wlblue ssf-sortable">Points</th>
-					<th data-column="number_of_solved" class="px-4 py-2 border-b2 border-wlblue ssf-sortable">Problems</th>
+					<th width="10%" class="px-4 py-2 border-b2 border-wlblue">Rank</th>
+					<th width="60%" class="px-4 py-2 border-b2 border-wlblue">Username</th>
+					<th width="15%" data-column="points" class="px-4 py-2 border-b2 border-wlblue ssf-sortable">Points</th>
+					<th width="15%" data-column="number_of_solved" class="px-4 py-2 border-b2 border-wlblue ssf-sortable">Problems</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -23,7 +23,9 @@
 						{{ user.rank }}
 					</td>
 					<td class="px-4 py-2 border-b border-slate-700">
-						{{ user.username }}
+						<a href="/user/{{ user.username }}" class="cursor-pointer">
+							{{ user.username }}
+						</a>
 					</td>
 					<td class="px-4 py-2 border-b border-slate-700">
 						{{ user.points }}
@@ -31,7 +33,6 @@
 					<td class="px-4 py-2 border-b border-slate-700">
 						{{ user.number_of_solved }}
 					</td>
-					<!-- {{ users.id }} -->
 				</tr>
 				{% endfor %}
 			</tbody>
