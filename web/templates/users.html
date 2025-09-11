@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="w-full h-full p-16 max-w-[64rem]">
+<div class="w-full h-full p-16">
 	<div class="">
 		<h1 class="text-2xl mb-2 pb-2 border-wlblue border-b-4">
 			Leaderboard
@@ -59,7 +59,7 @@
 			const el = document.createElement("a")
 			el.href = `?${params.toString()}`
 			el.click()
-			
+
 			header.classList.toggle("asc", asc);
 			header.classList.toggle("desc", !asc);
 		});

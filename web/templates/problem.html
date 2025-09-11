@@ -23,7 +23,7 @@
 <div class="w-full grow flex gap-6 lg:px-36 not-md:contents">
 	<div class="generic-container grow">
 		<h1 class="text-5xl font-bold mb-4">
-			{% if solved %}
+			{% if solved or success %}
 			<span class="text-green-300 icon">&#xe5ca;</span>
 			{% endif %}
 			{{ problem.title }}

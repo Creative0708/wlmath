@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.contrib.admin.sites import ModelAdmin
 from django.contrib.auth.admin import UserAdmin
-<<<<<<< HEAD
-from .models import Problem, WlmathUser
+
+from .models import Problem, WlmathUser, Tag
 from django.contrib import admin
 
 class WlmathModelAdmin(admin.ModelAdmin):
@@ -13,10 +13,4 @@ class WlmathModelAdmin(admin.ModelAdmin):
 
 admin.site.register(WlmathUser, UserAdmin)
 admin.site.register(Problem, WlmathModelAdmin)
-=======
-from .models import Problem, WlmathUser, Tag
-
-admin.site.register(WlmathUser, UserAdmin)
-admin.site.register(Problem, ModelAdmin)
 admin.site.register(Tag, ModelAdmin)
->>>>>>> bb09f95 (made it so that admins can add categories shrug)
