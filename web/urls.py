@@ -13,5 +13,6 @@ urlpatterns = [
   	path("user/edit", views.user_self_edit, name="profile_self_edit"),
 	path("user/<str:username>/", views.user, name="profile"),
 	path("user/", views.user_self, name="profile_self"),
-	path("martor/", include("martor.urls"))
+	path("martor/", include("martor.urls")),
+    path("resources/", views.resources, name="resources")
 ]

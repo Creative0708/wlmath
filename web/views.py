@@ -8,10 +8,11 @@ from django.views.generic import CreateView
 from django.db.models import F, Window, Count
 from django.db.models.functions import Rank
 from django.core.paginator import Paginator
+from django.utils import timezone
 from . import consts
 from hashlib import sha256
 
-from web.models import Problem
+from web.models import Problem, WebsiteData, UpcomingContest, PastResources
 User = get_user_model()
 
 
@@ -189,10 +190,10 @@ def user_self(request):
 	if not req_user.is_authenticated:
 		return redirect(reverse_lazy('login'))
 
-	return user(request, req_user.username)
+	return user(request, req_user.username, True)
 
 
-def user(request, username):
+def user(request, username, is_self=False):
 
 	profile = get_object_or_404(User, username=username)
 
@@ -214,7 +215,8 @@ def user(request, username):
 		"points": profile.points,
 		"rank": rank,
 		"problems_solved": problems_solved,
-		"bio": profile.bio
+		"bio": profile.bio,
+		"is_self": is_self
 	})
 
 def user_self_problems(request):
@@ -239,4 +241,15 @@ def user_problems(request, username):
 		"email_hash": email_hash,
 		"points": profile.points,
 		"problems_solved": problems_solved,
+	})
+
+def resources(request):
+	content = WebsiteData.objects.get(data_id="resources") or ""
+	contest_data = UpcomingContest.objects.filter(date__gt=timezone.now()).order_by("date")
+	lessons = PastResources.objects.filter(date__lt=timezone.now()).order_by("date")
+
+	return render(request, "resources.html", {
+		"contest_data": contest_data,
+		"lesson_data": [lesson.__dict__ | {'index': i + 1} for i, lesson in enumerate(lessons)],
+		"general_resources": content
 	})

@@ -52,3 +52,39 @@ class Problem(models.Model):
 
 	def __str__(self):
 		return self.title
+
+class WebsiteData(models.Model):
+	data_id = models.CharField(max_length=100)
+	content_markdown = MartorField()
+
+	# Maybe some day you can also add html
+	# content_html = models.TextField()
+
+	# use_markdown = models.BooleanField(default=True)
+	# use_html = models.BooleanField(default=False)
+
+	def __str__(self):
+		return self.data_id
+	
+class UpcomingContest(models.Model):
+	name = models.CharField()
+	date = models.DateField()
+	contest_link = models.CharField()
+
+	registration_link = models.CharField()
+	registration_open = models.BooleanField(default=False)
+
+
+	def __str__(self):
+		return self.name
+	
+class PastResources(models.Model):
+	title = models.CharField()
+	date = models.DateField()
+	description = models.TextField(blank=True, default="")
+
+	links = models.JSONField(blank=True, default=dict)
+
+	def __str__(self):
+		length = 40
+		return self.title if len(self.title) <= length else self.title[:length - 3] + "..." 
