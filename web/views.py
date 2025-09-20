@@ -12,7 +12,7 @@ from django.utils import timezone
 from . import consts
 from hashlib import sha256
 
-from web.models import Problem, WebsiteData, UpcomingContest, PastResources
+from web.models import Problem, WebsiteData, UpcomingContest, PastResource
 User = get_user_model()
 
 
@@ -246,7 +246,7 @@ def user_problems(request, username):
 def resources(request):
 	content = WebsiteData.objects.get(data_id="resources") or ""
 	contest_data = UpcomingContest.objects.filter(date__gt=timezone.now()).order_by("date")
-	lessons = PastResources.objects.filter(date__lt=timezone.now()).order_by("date")
+	lessons = PastResource.objects.filter(date__lt=timezone.now()).order_by("date")
 
 	return render(request, "resources.html", {
 		"contest_data": contest_data,

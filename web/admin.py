@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.sites import ModelAdmin
 from django.contrib.auth.admin import UserAdmin
-from .models import Problem, WlmathUser, Tag, WebsiteData, UpcomingContest, PastResources
+from .models import Problem, WlmathUser, Tag, WebsiteData, UpcomingContest, PastResource
 
 class WlmathModelAdmin(admin.ModelAdmin):
 	class Media:
@@ -42,4 +42,4 @@ admin.site.register(Problem, ModelAdmin)
 admin.site.register(Tag, ModelAdmin)
 admin.site.register(WebsiteData, ModelAdmin)
 admin.site.register(UpcomingContest, UpcomingContestAdmin)
-admin.site.register(PastResources, PastResourcesAdmin)
+admin.site.register(PastResource, PastResourcesAdmin)

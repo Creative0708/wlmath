@@ -78,7 +78,7 @@ class UpcomingContest(models.Model):
 	def __str__(self):
 		return self.name
 	
-class PastResources(models.Model):
+class PastResource(models.Model):
 	title = models.CharField()
 	date = models.DateField()
 	description = models.TextField(blank=True, default="")

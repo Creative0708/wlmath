@@ -1,0 +1,391 @@
+[
+    {
+        "model": "web.upcomingcontest",
+        "pk": 1,
+        "fields": {
+            "name": "COMC",
+            "date": "2025-10-30",
+            "contest_link": "https://cms.math.ca/competitions/comc/comc2025/",
+            "registration_link": "https://www.example.com",
+            "registration_open": false
+        }
+    },
+    {
+        "model": "web.upcomingcontest",
+        "pk": 2,
+        "fields": {
+            "name": "CSIMC (CEMC)",
+            "date": "2025-11-12",
+            "contest_link": "https://cemc.uwaterloo.ca/contests/csimc",
+            "registration_link": "https://www.example.com",
+            "registration_open": false
+        }
+    },
+    {
+        "model": "web.upcomingcontest",
+        "pk": 3,
+        "fields": {
+            "name": "AMC A",
+            "date": "2025-11-05",
+            "contest_link": "https://maa.org/student-programs/amc/",
+            "registration_link": "https://www.example.com",
+            "registration_open": false
+        }
+    },
+    {
+        "model": "web.upcomingcontest",
+        "pk": 4,
+        "fields": {
+            "name": "AIME Pt. 1",
+            "date": "2026-02-05",
+            "contest_link": "https://maa.org/aime",
+            "registration_link": "https://www.example.com",
+            "registration_open": false
+        }
+    },
+    {
+        "model": "web.upcomingcontest",
+        "pk": 5,
+        "fields": {
+            "name": "AIME Pt. 2",
+            "date": "2026-02-11",
+            "contest_link": "https://maa.org/aime",
+            "registration_link": "https://www.example.com",
+            "registration_open": false
+        }
+    },
+    {
+        "model": "web.upcomingcontest",
+        "pk": 6,
+        "fields": {
+            "name": "PCF (CEMC)",
+            "date": "2026-02-25",
+            "contest_link": "https://cemc.uwaterloo.ca/contests/pcf",
+            "registration_link": "https://www.example.com",
+            "registration_open": false
+        }
+    },
+    {
+        "model": "web.upcomingcontest",
+        "pk": 7,
+        "fields": {
+            "name": "Euclid (CEMC)",
+            "date": "2026-03-31",
+            "contest_link": "https://cemc.uwaterloo.ca/contests/euclid",
+            "registration_link": "https://www.example.com",
+            "registration_open": false
+        }
+    },
+    {
+        "model": "web.upcomingcontest",
+        "pk": 8,
+        "fields": {
+            "name": "FGH (CEMC)",
+            "date": "2026-04-01",
+            "contest_link": "https://cemc.uwaterloo.ca/contests/fgh",
+            "registration_link": "https://www.example.com",
+            "registration_open": true
+        }
+    },
+    {
+        "model": "web.websitedata",
+        "pk": 1,
+        "fields": {
+            "data_id": "resources",
+            "content_markdown": "Past Waterloo contests (with answers): [https://cemc.uwaterloo.ca/contests/past_contests.html](https://cemc.uwaterloo.ca/contests/past_contests.html)\r\n\r\nPast COMC contests (with answers, but older ones have typos): [https://cms.math.ca/Competitions/COMC/2019/](https://cms.math.ca/Competitions/COMC/2019/)\r\n\r\nRandom problem set generator: [https://cemc2.math.uwaterloo.ca/contest/PSG/school/index.php](https://cemc2.math.uwaterloo.ca/contest/PSG/school/index.php)\r\n\r\nKhan Academy (online courses about all subjects): [https://www.khanacademy.org/](https://www.khanacademy.org/)\r\n\r\nAP Calculus on Collegeboard: [https://apcentral.collegeboard.org/courses/ap-calculus-ab/course](https://apcentral.collegeboard.org/courses/ap-calculus-ab/course)\r\n\r\nMath club╞s lessons: [https://mackenziemathclub.github.io/lessons/](https://mackenziemathclub.github.io/lessons/)\r\n\r\nMath club╞s former lessons: [https://mackenziemathclub.github.io/archive/](https://mackenziemathclub.github.io/archive/)"
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 1,
+        "fields": {
+            "title": "Numbers and Place Value",
+            "date": "2024-09-18",
+            "description": "Covers whole numbers, digits, and understanding the value of numbers in different places.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson1",
+                "Worksheet": "https://example.com/math-worksheet1",
+                "Answer": "https://example.com/math-answer1"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 2,
+        "fields": {
+            "title": "Addition and Subtraction",
+            "date": "2024-09-20",
+            "description": "Students practice solving addition and subtraction problems, including regrouping strategies.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson2",
+                "Worksheet": "https://example.com/math-worksheet2",
+                "Answer": "https://example.com/math-answer2"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 3,
+        "fields": {
+            "title": "Multiplication Basics",
+            "date": "2024-09-22",
+            "description": "Introduces multiplication as repeated addition and teaches times tables.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson3",
+                "Worksheet": "https://example.com/math-worksheet3",
+                "Answer": "https://example.com/math-answer3"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 4,
+        "fields": {
+            "title": "Division Basics",
+            "date": "2024-09-24",
+            "description": "Covers division as sharing and grouping, with simple division problems.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson4",
+                "Worksheet": "https://example.com/math-worksheet4",
+                "Answer": "https://example.com/math-answer4"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 5,
+        "fields": {
+            "title": "Fractions Introduction",
+            "date": "2024-09-26",
+            "description": "Explains numerators, denominators, and identifying fractions in shapes and sets.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson5",
+                "Worksheet": "https://example.com/math-worksheet5",
+                "Answer": "https://example.com/math-answer5"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 6,
+        "fields": {
+            "title": "Decimals",
+            "date": "2024-09-28",
+            "description": "Students learn tenths, hundredths, and how decimals relate to fractions.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson6",
+                "Worksheet": "https://example.com/math-worksheet6",
+                "Answer": "https://example.com/math-answer6"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 7,
+        "fields": {
+            "title": "Percentages",
+            "date": "2024-09-30",
+            "description": "Covers percentages as parts of 100 and relates them to fractions and decimals.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson7",
+                "Worksheet": "https://example.com/math-worksheet7",
+                "Answer": "https://example.com/math-answer7"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 8,
+        "fields": {
+            "title": "Negative Numbers",
+            "date": "2024-10-02",
+            "description": "Introduces integers, number lines, and comparing positive and negative numbers.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson8",
+                "Worksheet": "https://example.com/math-worksheet8",
+                "Answer": "https://example.com/math-answer8"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 9,
+        "fields": {
+            "title": "Factors and Multiples",
+            "date": "2024-10-04",
+            "description": "Explores factors, multiples, prime numbers, and common multiples.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson9",
+                "Worksheet": "https://example.com/math-worksheet9",
+                "Answer": "https://example.com/math-answer9"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 10,
+        "fields": {
+            "title": "Introduction to Algebra",
+            "date": "2024-10-06",
+            "description": "Covers variables, expressions, and simple one-step equations.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson10",
+                "Worksheet": "https://example.com/math-worksheet10",
+                "Answer": "https://example.com/math-answer10"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 11,
+        "fields": {
+            "title": "Geometry Basics",
+            "date": "2024-10-08",
+            "description": "Introduces points, lines, angles, and basic 2D shapes.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson11",
+                "Worksheet": "https://example.com/math-worksheet11",
+                "Answer": "https://example.com/math-answer11"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 12,
+        "fields": {
+            "title": "Perimeter and Area",
+            "date": "2024-10-10",
+            "description": "Students learn how to calculate the perimeter and area of different shapes.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson12",
+                "Worksheet": "https://example.com/math-worksheet12",
+                "Answer": "https://example.com/math-answer12"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 13,
+        "fields": {
+            "title": "Volume and Surface Area",
+            "date": "2024-10-12",
+            "description": "Covers 3D shapes and how to find their volume and surface area.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson13",
+                "Worksheet": "https://example.com/math-worksheet13",
+                "Answer": "https://example.com/math-answer13"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 14,
+        "fields": {
+            "title": "Ratios and Proportions",
+            "date": "2024-10-14",
+            "description": "Students solve problems using ratios, proportions, and scale.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson14",
+                "Worksheet": "https://example.com/math-worksheet14",
+                "Answer": "https://example.com/math-answer14"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 15,
+        "fields": {
+            "title": "Coordinate Geometry",
+            "date": "2024-10-16",
+            "description": "Introduces the coordinate plane, plotting points, and identifying quadrants.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson15",
+                "Worksheet": "https://example.com/math-worksheet15",
+                "Answer": "https://example.com/math-answer15"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 16,
+        "fields": {
+            "title": "Linear Equations",
+            "date": "2024-10-18",
+            "description": "Focuses on solving and graphing linear equations with one variable.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson16",
+                "Worksheet": "https://example.com/math-worksheet16",
+                "Answer": "https://example.com/math-answer16"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 17,
+        "fields": {
+            "title": "Inequalities",
+            "date": "2024-10-20",
+            "description": "Covers solving and graphing inequalities on a number line.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson17",
+                "Worksheet": "https://example.com/math-worksheet17",
+                "Answer": "https://example.com/math-answer17"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 18,
+        "fields": {
+            "title": "Polynomials",
+            "date": "2024-10-22",
+            "description": "Introduces polynomial expressions, addition, subtraction, and multiplication.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson18",
+                "Worksheet": "https://example.com/math-worksheet18",
+                "Answer": "https://example.com/math-answer18"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 19,
+        "fields": {
+            "title": "Quadratic Equations",
+            "date": "2024-10-24",
+            "description": "Students solve quadratic equations by factoring and graphing parabolas.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson19",
+                "Worksheet": "https://example.com/math-worksheet19",
+                "Answer": "https://example.com/math-answer19"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 20,
+        "fields": {
+            "title": "Introduction to Probability and Statistics",
+            "date": "2024-10-26",
+            "description": "Covers probability, mean, median, mode, and simple data interpretation.",
+            "links": {
+                "Lesson": "https://example.com/math-lesson20",
+                "Worksheet": "https://example.com/math-worksheet20",
+                "Answer": "https://example.com/math-answer20"
+            }
+        }
+    },
+    {
+        "model": "web.pastresource",
+        "pk": 21,
+        "fields": {
+            "title": "Mock COMC",
+            "date": "2024-09-20",
+            "description": "COMC Prep (No Lesson)",
+            "links": {
+                "Mock Contest": "https://example.com/mock-contest-1",
+                "Answers": "https://example.com/mock-contest-answers-1"
+            }
+        }
+    }
+]
