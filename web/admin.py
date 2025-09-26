@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.sites import ModelAdmin
 from django.contrib.auth.admin import UserAdmin
-from .models import Problem, WlmathUser, Tag, WebsiteData, UpcomingContest, PastResource
+from .models import Problem, Submission, WlmathUser, Tag, WebsiteData, UpcomingContest, PastResource
 
 class WlmathModelAdmin(admin.ModelAdmin):
 	class Media:
@@ -37,9 +37,14 @@ class PastResourcesAdmin(ModelAdmin):
 	list_display = ('title', 'date')
 	list_filter = ('date', )
 
+class SubmissionAdmin(ModelAdmin):
+	list_display = ('problem', 'user', 'is_correct', 'submission_date')
+	list_filter = ('problem', 'user', 'is_correct')
+
 admin.site.register(WlmathUser, WlmathUserAdmin)
 admin.site.register(Problem, ModelAdmin)
 admin.site.register(Tag, ModelAdmin)
 admin.site.register(WebsiteData, ModelAdmin)
 admin.site.register(UpcomingContest, UpcomingContestAdmin)
 admin.site.register(PastResource, PastResourcesAdmin)
+admin.site.register(Submission, SubmissionAdmin)

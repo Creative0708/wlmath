@@ -18,7 +18,7 @@ class WlmathUser(AbstractUser):
 	grade = models.CharField(max_length=20, blank=True)
 	bio = models.TextField(max_length=consts.PROFILE_BIO_LIMIT, blank=True)
 
-	problems_solved = models.ManyToManyField('Problem')
+	problems_solved = models.ManyToManyField('Problem', related_name='solved_users')
 
 	# badges = models.ManyToManyField('Badge', blank=True)
 
@@ -46,6 +46,35 @@ class Problem(models.Model):
 	date_added = models.DateTimeField(auto_now_add=True)
 	date_modified = models.DateTimeField(auto_now=True)
 
+	def save(self, *args, **kwargs):
+		if self.pk:  
+			old = Problem.objects.get(pk=self.pk)
+		if old.answer != self.answer: 
+			previous_solvers = set(old.solved_users.all())
+			old.solved_users.clear()
+
+			submissions = old.submissions.all()
+			correct_users = set()
+
+			for submission in submissions:
+				submission.is_correct = (submission.submission == self.answer)
+				if submission.is_correct:
+					correct_users.add(submission.user)
+
+			old.submissions.bulk_update(submissions, ["is_correct"])
+
+			old.solved_users.add(*correct_users)
+
+			# This screws up if we also change the point value :)
+			for user in previous_solvers - correct_users:
+				user.points -= old.points
+				user.save()
+            
+			for user in correct_users - previous_solvers:
+				user.points += old.points
+				user.save()
+
+		super().save(*args, **kwargs)
 
 	def url(self):
 		return f"/problems/{self.slug}/"
@@ -88,3 +117,12 @@ class PastResource(models.Model):
 	def __str__(self):
 		length = 40
 		return self.title if len(self.title) <= length else self.title[:length - 3] + "..." 
+	
+class Submission(models.Model):
+	user = models.ForeignKey(WlmathUser, on_delete=models.CASCADE, related_name="submissions")
+	problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="submissions")
+
+	submission = models.CharField(max_length=consts.ANSWER_MAX_LENGTH)
+	is_correct = models.CharField(default=False)
+
+	submission_date = models.DateTimeField(auto_now_add=True)

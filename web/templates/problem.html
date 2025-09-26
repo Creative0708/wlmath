@@ -72,6 +72,9 @@
 				</p>
 				{% endif %}
 			</form>
+			{% if solved %}
+				<a class="mt-40" href="./submissions">View Submissions</a>
+			{% endif %}
 		</div>
 		{% if user.is_superuser %}
 		<div class="generic-container">

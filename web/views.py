@@ -12,7 +12,7 @@ from django.utils import timezone
 from . import consts
 from hashlib import sha256
 
-from web.models import Problem, WebsiteData, UpcomingContest, PastResource
+from web.models import Problem, WebsiteData, UpcomingContest, PastResource, Submission
 User = get_user_model()
 
 
@@ -36,8 +36,26 @@ def problem(request, slug):
 		form = SubmitProblemForm(request.POST, problem=problem)
 		if form.is_valid():
 			success = True
-			if not solved:
+			if not solved:			
 				request.user.problems_solved.add(problem)
+				request.user.points += problem.points 
+				request.user.save()
+
+				
+			Submission.objects.create(**{
+				'user': request.user,
+				'problem': problem,
+				'submission': form.cleaned_data['answer'],
+				'is_correct': True
+			})
+
+		elif form.is_correct == False:
+			Submission.objects.create(**{
+				'user': request.user,
+				'problem': problem,
+				'submission': form.return_answer,
+				'is_correct': False
+			})
 	else:
 		form = SubmitProblemForm(problem=problem)
 
@@ -53,12 +71,37 @@ class SubmitProblemForm(forms.Form):
 
 	def __init__(self, *args, problem: Problem, **kwargs) -> None:
 		self.problem = problem
+		self.is_correct = None
+		self.return_answer = None
+
 		super().__init__(*args, **kwargs)
 
 	def clean(self):
-		if not self.errors and self.cleaned_data.get("answer") != self.problem.answer:
-			self.add_error("answer", f"That's not the right answer.")
+		if not self.errors:
+			user_answer = self.cleaned_data.get("answer")
+
+			if user_answer != self.problem.answer:
+				self.add_error("answer", f"That's not the right answer.")
+				self.return_answer = user_answer
+				self.is_correct = False
+			else:
+				self.is_correct = True
 		return super().clean()
+
+def problem_submission(request, slug, is_self = False):
+	
+	problem = get_object_or_404(Problem, slug=slug)
+
+	submissions = problem.submissions.all()
+
+	if not request.user.problems_solved.contains(problem):
+		return redirect(reverse_lazy("problem", kwargs={"slug": slug}))
+
+	return render(request, "problem_submissions.html", {
+		"problem": problem,
+		"submissions": submissions,
+		"is_self": is_self
+	})
 
 def problem_list(request):
 	problems = Problem.objects.order_by("date_added")
@@ -200,7 +243,11 @@ def user(request, username, is_self=False):
 	email_hash = sha256(profile.email.encode('utf-8')).hexdigest()
 	num_problems_solved = profile.problems_solved.count()
 	rank = User.objects.filter(points__gt=profile.points).count() + 1
-	problems_solved = profile.problems_solved.all().order_by("-points")[:25]
+	problems_solved = profile.problems_solved.order_by("-points")[:10]
+	submissions = profile.submissions.order_by('-submission_date')[:10]
+
+	for i in submissions:
+		print(i.__dict__)
 
 	grade = profile.grade
 
@@ -216,7 +263,9 @@ def user(request, username, is_self=False):
 		"rank": rank,
 		"problems_solved": problems_solved,
 		"bio": profile.bio,
-		"is_self": is_self
+		"is_self": is_self,
+		"num_submissions": profile.submissions.count(),
+		"submissions": submissions
 	})
 
 def user_self_problems(request):
@@ -252,4 +301,14 @@ def resources(request):
 		"contest_data": contest_data,
 		"lesson_data": [lesson.__dict__ | {'index': i + 1} for i, lesson in enumerate(lessons)],
 		"general_resources": content
+	})
+
+def submission(request, pk):
+	
+	submission = get_object_or_404(Submission, pk=pk)
+	email_hash = sha256(submission.user.email.encode('utf-8')).hexdigest()
+
+
+	return render(request, "submission.html", {
+		"submission": submission
 	})

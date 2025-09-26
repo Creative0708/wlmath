@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="w-full">
+    <div> <!-- Problems Section -->
+        <div class="border-wlblue border-b-4 my-4 pb-2 flex items-center">
+            <img src="https://www.gravatar.com/avatar/{{ email_hash }}?d=identicon" class="mx-4 w-10 h-10 rounded-sm">
+            <p class="text-2xl">{{ submission.user.username }} - Submission ID {{ submission.pk }}</p>
+        </div>
+        <div class="space-y-4 text-xl px-16 my-auto">
+            <div class="flex justify-between items-center">
+                <p>User:</p>
+                <a href="/user/{{ submission.user.username }}" class="hover:underline">{{ submission.user.username }}</a>
+            </div>
+
+            <hr class="text-deep-muted">
+
+            <div class="flex justify-between items-center">
+                <p>Problem:</p>
+                <a href="/problems/{{ submission.problem.slug }}" class="hover:underline">{{ submission.problem.title }}</a>
+            </div>
+
+            <hr class="text-deep-muted">
+
+            <div class="flex justify-between items-center">
+                <p>Submission:</p>
+                <p>{{ submission.submission }}</p>
+            </div>
+
+            <hr class="text-deep-muted">
+
+            <div class="flex justify-between items-center">
+                <p>Status:</p>
+                <p>
+                    {% if submission.is_correct == 'True' %}
+                    AC
+                    {% else %}
+                    WA
+                    {% endif %}
+                </p>
+            </div>
+
+            <hr class="text-deep-muted">
+
+            <div class="flex justify-between items-center">
+                <p>Submission Date:</p>
+                <p>{{ submission.submission_date }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -17,6 +17,13 @@
 }
 @import "tailwindcss";
 
+.no-preflight,
+.no-preflight * ,
+.no-preflight *::before,
+.no-preflight *::after {
+  all: revert;
+}
+
 summary{
 	display: block;
 }

@@ -13,9 +13,16 @@
 				</p>
 				<p>
 					{% if num_problems_solved > 1 %}
-						{{ num_problems_solved }} Problems Solved
+					{{ num_problems_solved }} Problems Solved
 					{% else %}
-						{{ num_problems_solved }} Problem Solved
+					{{ num_problems_solved }} Problem Solved
+					{% endif %}
+				</p>
+				<p>
+					{% if num_submissions > 1 %}
+					{{ num_submissions }} Submissions
+					{% else %}
+					{{ num_submissions }} Submission
 					{% endif %}
 				</p>
 				<p>
@@ -36,34 +43,61 @@
 			<div class="border-wlblue border-b-4 my-4 pb-2 flex justify-between items-center">
 				<p class=" text-2xl">Bio</p>
 				{% if is_self %}
-					<a href="./edit" class="pr-4 hover:underline"><span class="icon">&#xe3c9;</span> Edit Profile</a>
+				<a href="./edit" class="pr-4 hover:underline"><span class="icon">&#xe3c9;</span> Edit Profile</a>
 				{% endif %}
 			</div>
 			<pre class="text-xl px-4 font-sans whitespace-pre-wrap break-words">{{ bio }}</pre>
 		</div>
 		<div> <!-- Problems Section -->
-			<div class="border-wlblue border-b-4 my-4 pb-2 flex justify-between items-center">
-				<p class="text-2xl">Problems Solved</p>
-				<a href="./problems" class="pr-4 hover:underline">View All</a>
-			</div>
-			<div class="space-y-2">
-				{% for problem in problems_solved %}
-				<a class="flex justify-around items-center px-4" href="/problems/{{ problem.slug }}">
+			<div>
+				<div class="border-wlblue border-b-4 my-4 pb-2 flex justify-between items-center">
+					<p class="text-2xl">Problems Solved</p>
+					<a href="./problems" class="pr-4 hover:underline">View All</a>
+				</div>
+				<div class="space-y-2">
 					<div>
-						<p class="text-xl">
-							{{ problem.title }}
-						</p>
-						<!-- Think about doing when you solved the problem in the future -->
-						<!-- <p class="text-muted text-sm">
-								{{ problem.date_added | date:"Y/m/d" }}
-							</p> -->
+						{% for problem in problems_solved %}
+						<a class="flex justify-around items-center px-4" href="/problems/{{ problem.slug }}">
+							<div>
+								<p class="text-xl">
+									{{ problem.title }}
+								</p>
+							</div>
+							<hr class="mx-4 flex-1  text-deep-muted">
+							<p class="text-xl w-max">
+								{{ problem.points }} pts
+							</p>
+						</a>
+						{% endfor %}
 					</div>
-					<hr class="mx-4 flex-1  text-deep-muted">
-					<p class="text-xl w-max">
-						{{ problem.points }} pts
-					</p>
-				</a>
-				{% endfor %}
+				</div>
+			</div>
+			<div>
+				<div class="border-wlblue border-b-4 my-4 pb-2 flex justify-between items-center">
+					<p class="text-2xl">Recent Submissions</p>
+					<!-- <a href="./problems" class="pr-4 hover:underline">View All</a> -->
+				</div>
+				<div class="space-y-2">
+					<div>
+						{% for submission in submissions %}
+						<a class="flex justify-around items-center px-4" href="/submissions/{{ submission.pk }}">
+							<div>
+								<p class="text-xl">
+									{{ submission.problem.title }} (ID {{ submission.pk }})
+								</p>
+							</div>
+							<hr class="mx-4 flex-1  text-deep-muted">
+							<p class="text-xl w-max">
+								{% if submission.is_correct == 'True' %}
+									AC
+								{% else %}
+									WA
+								{% endif %}
+							</p>
+						</a>
+						{% endfor %}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
