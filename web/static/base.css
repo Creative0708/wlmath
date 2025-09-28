@@ -24,6 +24,10 @@
   all: revert;
 }
 
+.no-preflight a {
+	color: var(--color-link)
+}
+
 summary{
 	display: block;
 }

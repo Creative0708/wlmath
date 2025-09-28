@@ -49,30 +49,31 @@ class Problem(models.Model):
 	def save(self, *args, **kwargs):
 		if self.pk:  
 			old = Problem.objects.get(pk=self.pk)
-		if old.answer != self.answer: 
-			previous_solvers = set(old.solved_users.all())
-			old.solved_users.clear()
 
-			submissions = old.submissions.all()
-			correct_users = set()
+			if old.answer != self.answer: 
+				previous_solvers = set(old.solved_users.all())
+				old.solved_users.clear()
 
-			for submission in submissions:
-				submission.is_correct = (submission.submission == self.answer)
-				if submission.is_correct:
-					correct_users.add(submission.user)
+				submissions = old.submissions.all()
+				correct_users = set()
 
-			old.submissions.bulk_update(submissions, ["is_correct"])
+				for submission in submissions:
+					submission.is_correct = (submission.submission == self.answer)
+					if submission.is_correct:
+						correct_users.add(submission.user)
 
-			old.solved_users.add(*correct_users)
+				old.submissions.bulk_update(submissions, ["is_correct"])
 
-			# This screws up if we also change the point value :)
-			for user in previous_solvers - correct_users:
-				user.points -= old.points
-				user.save()
-            
-			for user in correct_users - previous_solvers:
-				user.points += old.points
-				user.save()
+				old.solved_users.add(*correct_users)
+
+				# This screws up if we also change the point value :)
+				for user in previous_solvers - correct_users:
+					user.points -= old.points
+					user.save()
+				
+				for user in correct_users - previous_solvers:
+					user.points += old.points
+					user.save()
 
 		super().save(*args, **kwargs)
 
@@ -83,7 +84,7 @@ class Problem(models.Model):
 		return self.title
 
 class WebsiteData(models.Model):
-	data_id = models.CharField(max_length=100)
+	data_id = models.CharField(max_length=100, unique=True)
 	content_markdown = MartorField()
 
 	# Maybe some day you can also add html
@@ -94,6 +95,13 @@ class WebsiteData(models.Model):
 
 	def __str__(self):
 		return self.data_id
+	
+class Announcement(models.Model):
+	creation_date = models.DateTimeField(auto_now_add=True)
+	last_edit_date = models.DateTimeField(auto_now=True)
+
+	title = models.CharField()
+	content = MartorField()
 	
 class UpcomingContest(models.Model):
 	name = models.CharField()

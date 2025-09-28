@@ -12,14 +12,26 @@ from django.utils import timezone
 from . import consts
 from hashlib import sha256
 
-from web.models import Problem, WebsiteData, UpcomingContest, PastResource, Submission
+from web.models import Problem, WebsiteData, UpcomingContest, PastResource, Submission, Announcement
 User = get_user_model()
 
 
 def index(request):
-	recent_problems = Problem.objects.order_by("date_added")[:8]
+	recent_problems = Problem.objects.order_by("-date_added")[:8]
+	
+	top_problems = Problem.objects.annotate(
+		submission_count=Count('submissions')
+	).filter(submission_count__gt=0).order_by('-submission_count')[:8]
 
-	return render(request, "index.html", {"problems": recent_problems})
+	content, _ = WebsiteData.objects.get_or_create(data_id="index", defaults={
+		"content_markdown": """Welcome to WLMath, your one-stop shop for achieving high levels of brain damage from headache-inducing amounts of combinatorics and casework.
+
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos."""
+	}) 
+
+	announcements = Announcement.objects.order_by("-creation_date")
+
+	return render(request, "index.html", {"recent_problems": recent_problems, "content": content, "top_problems": top_problems, "announcements": announcements})
 
 
 def problem(request, slug):
@@ -233,21 +245,19 @@ def user_self(request):
 	if not req_user.is_authenticated:
 		return redirect(reverse_lazy('login'))
 
-	return user(request, req_user.username, True)
+	return user(request, req_user.username)
 
 
-def user(request, username, is_self=False):
-
+def user(request, username):
 	profile = get_object_or_404(User, username=username)
+
+	is_self = (request.user == profile)
 
 	email_hash = sha256(profile.email.encode('utf-8')).hexdigest()
 	num_problems_solved = profile.problems_solved.count()
 	rank = User.objects.filter(points__gt=profile.points).count() + 1
 	problems_solved = profile.problems_solved.order_by("-points")[:10]
 	submissions = profile.submissions.order_by('-submission_date')[:10]
-
-	for i in submissions:
-		print(i.__dict__)
 
 	grade = profile.grade
 
@@ -293,7 +303,10 @@ def user_problems(request, username):
 	})
 
 def resources(request):
-	content = WebsiteData.objects.get(data_id="resources") or ""
+	content, _ = WebsiteData.objects.get_or_create(data_id="resources", defaults={
+		"content_markdown": "Content editable in admin panel, in website data under /resources"
+	}) 
+
 	contest_data = UpcomingContest.objects.filter(date__gt=timezone.now()).order_by("date")
 	lessons = PastResource.objects.filter(date__lt=timezone.now()).order_by("date")
 
