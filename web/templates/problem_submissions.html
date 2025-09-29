@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="w-full">
+    <div>
+        <div class="border-wlblue border-b-4 my-4 pb-2 flex items-center">
+            <p class="text-2xl">All submissions for <a class="underline" href="/problems/{{ problem.slug }}">{{ problem.title }}</a></p>
+        </div>
+        <div class="space-y-2">
+            <table class="w-full text-left border-collapse overflow-auto">
+                <thead class="bg-slate-800 text-slate-200 [&_th]:select-none [&_.ssf-sortable]:cursor-pointer">
+                    <tr>
+                        <th width="5%" class="px-4 py-2 border-b2 border-wlblue">ID</th>
+                        <th width="40%" class="px-4 py-2 border-b2 border-wlblue">User</th>
+                        <th width="15%" data-column="points" class="px-4 py-2 border-b2 border-wlblue">
+                            Submission</th>
+                        <th width="15%" data-column="number_of_solved"
+                            class="px-4 py-2 border-b2 border-wlblue">Status</th>
+                        <th width="20%" class="px-4 py-2 border-b2 border-wlblue">Submission Date</th>
+                        <th width="5%" class="px-4 py-2 border-b2 border-wlblue">Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for submission in submissions %}
+                    <tr class="hover:bg-slate-800 transition-colors duration-75">
+                        <td class="px-4 py-2 border-b border-slate-700">
+                            {{ submission.pk }}
+                        </td>
+                        <td class="px-4 py-2 border-b border-slate-700">
+                            <a href="/user/{{ user.username }}" class="cursor-pointer">
+                                {{ user.username }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2 border-b border-slate-700">
+                            {{ submission.submission }}
+                        </td>
+                        <td class="px-4 py-2 border-b border-slate-700">
+                            {% if submission.is_correct == 'True' %}
+                            AC
+                            {% else %}
+                            WA
+                            {% endif %}
+                        </td>
+
+                        <td class="px-4 py-2 border-b border-slate-700">
+                            {{ submission.submission_date }}
+                        </td>
+
+                        <td class="px-4 py-2 border-b border-slate-700">
+                            <a href="/submissions/{{ submission.pk }}" class="underline cursor-pointer">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

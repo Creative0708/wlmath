@@ -8,17 +8,30 @@ from django.views.generic import CreateView
 from django.db.models import F, Window, Count
 from django.db.models.functions import Rank
 from django.core.paginator import Paginator
+from django.utils import timezone
 from . import consts
 from hashlib import sha256
 
-from web.models import Problem
+from web.models import Problem, WebsiteData, UpcomingContest, PastResource, Submission, Announcement
 User = get_user_model()
 
 
 def index(request):
-	recent_problems = Problem.objects.order_by("date_added")[:8]
+	recent_problems = Problem.objects.order_by("-date_added")[:8]
+	
+	top_problems = Problem.objects.annotate(
+		submission_count=Count('submissions')
+	).filter(submission_count__gt=0).order_by('-submission_count')[:8]
 
-	return render(request, "index.html", {"problems": recent_problems})
+	content, _ = WebsiteData.objects.get_or_create(data_id="index", defaults={
+		"content_markdown": """Welcome to WLMath, your one-stop shop for achieving high levels of brain damage from headache-inducing amounts of combinatorics and casework.
+
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos."""
+	}) 
+
+	announcements = Announcement.objects.order_by("-creation_date")
+
+	return render(request, "index.html", {"recent_problems": recent_problems, "content": content, "top_problems": top_problems, "announcements": announcements})
 
 
 def problem(request, slug):
@@ -35,8 +48,26 @@ def problem(request, slug):
 		form = SubmitProblemForm(request.POST, problem=problem)
 		if form.is_valid():
 			success = True
-			if not solved:
+			if not solved:			
 				request.user.problems_solved.add(problem)
+				request.user.points += problem.points 
+				request.user.save()
+
+				
+			Submission.objects.create(**{
+				'user': request.user,
+				'problem': problem,
+				'submission': form.cleaned_data['answer'],
+				'is_correct': True
+			})
+
+		elif form.is_correct == False:
+			Submission.objects.create(**{
+				'user': request.user,
+				'problem': problem,
+				'submission': form.return_answer,
+				'is_correct': False
+			})
 	else:
 		form = SubmitProblemForm(problem=problem)
 
@@ -52,12 +83,37 @@ class SubmitProblemForm(forms.Form):
 
 	def __init__(self, *args, problem: Problem, **kwargs) -> None:
 		self.problem = problem
+		self.is_correct = None
+		self.return_answer = None
+
 		super().__init__(*args, **kwargs)
 
 	def clean(self):
-		if not self.errors and self.cleaned_data.get("answer") != self.problem.answer:
-			self.add_error("answer", f"That's not the right answer.")
+		if not self.errors:
+			user_answer = self.cleaned_data.get("answer")
+
+			if user_answer != self.problem.answer:
+				self.add_error("answer", f"That's not the right answer.")
+				self.return_answer = user_answer
+				self.is_correct = False
+			else:
+				self.is_correct = True
 		return super().clean()
+
+def problem_submission(request, slug, is_self = False):
+	
+	problem = get_object_or_404(Problem, slug=slug)
+
+	submissions = problem.submissions.all()
+
+	if not request.user.problems_solved.contains(problem):
+		return redirect(reverse_lazy("problem", kwargs={"slug": slug}))
+
+	return render(request, "problem_submissions.html", {
+		"problem": problem,
+		"submissions": submissions,
+		"is_self": is_self
+	})
 
 def problem_list(request):
 	problems = Problem.objects.order_by("date_added")
@@ -193,13 +249,15 @@ def user_self(request):
 
 
 def user(request, username):
-
 	profile = get_object_or_404(User, username=username)
+
+	is_self = (request.user == profile)
 
 	email_hash = sha256(profile.email.encode('utf-8')).hexdigest()
 	num_problems_solved = profile.problems_solved.count()
 	rank = User.objects.filter(points__gt=profile.points).count() + 1
-	problems_solved = profile.problems_solved.all().order_by("-points")[:25]
+	problems_solved = profile.problems_solved.order_by("-points")[:10]
+	submissions = profile.submissions.order_by('-submission_date')[:10]
 
 	grade = profile.grade
 
@@ -214,7 +272,10 @@ def user(request, username):
 		"points": profile.points,
 		"rank": rank,
 		"problems_solved": problems_solved,
-		"bio": profile.bio
+		"bio": profile.bio,
+		"is_self": is_self,
+		"num_submissions": profile.submissions.count(),
+		"submissions": submissions
 	})
 
 def user_self_problems(request):
@@ -239,4 +300,28 @@ def user_problems(request, username):
 		"email_hash": email_hash,
 		"points": profile.points,
 		"problems_solved": problems_solved,
+	})
+
+def resources(request):
+	content, _ = WebsiteData.objects.get_or_create(data_id="resources", defaults={
+		"content_markdown": "Content editable in admin panel, in website data under /resources"
+	}) 
+
+	contest_data = UpcomingContest.objects.filter(date__gt=timezone.now()).order_by("date")
+	lessons = PastResource.objects.filter(date__lt=timezone.now()).order_by("date")
+
+	return render(request, "resources.html", {
+		"contest_data": contest_data,
+		"lesson_data": [lesson.__dict__ | {'index': i + 1} for i, lesson in enumerate(lessons)],
+		"general_resources": content
+	})
+
+def submission(request, pk):
+	
+	submission = get_object_or_404(Submission, pk=pk)
+	email_hash = sha256(submission.user.email.encode('utf-8')).hexdigest()
+
+
+	return render(request, "submission.html", {
+		"submission": submission
 	})

@@ -18,7 +18,7 @@ class WlmathUser(AbstractUser):
 	grade = models.CharField(max_length=20, blank=True)
 	bio = models.TextField(max_length=consts.PROFILE_BIO_LIMIT, blank=True)
 
-	problems_solved = models.ManyToManyField('Problem')
+	problems_solved = models.ManyToManyField('Problem', related_name='solved_users')
 
 	# badges = models.ManyToManyField('Badge', blank=True)
 
@@ -46,9 +46,91 @@ class Problem(models.Model):
 	date_added = models.DateTimeField(auto_now_add=True)
 	date_modified = models.DateTimeField(auto_now=True)
 
+	def save(self, *args, **kwargs):
+		if self.pk:  
+			old = Problem.objects.get(pk=self.pk)
+
+			if old.answer != self.answer: 
+				previous_solvers = set(old.solved_users.all())
+				old.solved_users.clear()
+
+				submissions = old.submissions.all()
+				correct_users = set()
+
+				for submission in submissions:
+					submission.is_correct = (submission.submission == self.answer)
+					if submission.is_correct:
+						correct_users.add(submission.user)
+
+				old.submissions.bulk_update(submissions, ["is_correct"])
+
+				old.solved_users.add(*correct_users)
+
+				# This screws up if we also change the point value :)
+				for user in previous_solvers - correct_users:
+					user.points -= old.points
+					user.save()
+				
+				for user in correct_users - previous_solvers:
+					user.points += old.points
+					user.save()
+
+		super().save(*args, **kwargs)
 
 	def url(self):
 		return f"/problems/{self.slug}/"
 
 	def __str__(self):
 		return self.title
+
+class WebsiteData(models.Model):
+	data_id = models.CharField(max_length=100, unique=True)
+	content_markdown = MartorField()
+
+	# Maybe some day you can also add html
+	# content_html = models.TextField()
+
+	# use_markdown = models.BooleanField(default=True)
+	# use_html = models.BooleanField(default=False)
+
+	def __str__(self):
+		return self.data_id
+	
+class Announcement(models.Model):
+	creation_date = models.DateTimeField(auto_now_add=True)
+	last_edit_date = models.DateTimeField(auto_now=True)
+
+	title = models.CharField()
+	content = MartorField()
+	
+class UpcomingContest(models.Model):
+	name = models.CharField()
+	date = models.DateField()
+	contest_link = models.CharField()
+
+	registration_link = models.CharField()
+	registration_open = models.BooleanField(default=False)
+
+
+	def __str__(self):
+		return self.name
+	
+class PastResource(models.Model):
+	title = models.CharField()
+	date = models.DateField()
+	description = models.TextField(blank=True, default="")
+
+	links = models.JSONField(blank=True, default=dict)
+
+	def __str__(self):
+		length = 40
+		return self.title if len(self.title) <= length else self.title[:length - 3] + "..." 
+	
+class Submission(models.Model):
+	user = models.ForeignKey(WlmathUser, on_delete=models.CASCADE, related_name="submissions")
+	problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="submissions")
+
+	submission = models.CharField(max_length=consts.ANSWER_MAX_LENGTH)
+	is_correct = models.CharField(default=False)
+
+	submission_date = models.DateTimeField(auto_now_add=True)

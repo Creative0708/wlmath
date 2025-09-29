@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load markdown %}
+
+{% block content %}
+<div class="w-full h-full px-16">
+    <div class="space-y-8 [&>div:not(#header)]:px-4">
+        <div id="header">
+            <h1 class="text-2xl mb-2 pb-2 border-wlblue border-b-4">
+                Resources
+            </h1>
+        </div>
+        <div>
+            <p class="text-xl mb-2 flex items-center hover:[&>a]:block" id="upcoming_contests">
+                Upcoming Contests
+                <a href="#upcoming_contests" class="pl-2 hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-link-icon lucide-link">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg>
+                </a>
+            </p>
+            <div class="space-y-4">
+                {% for contest in contest_data %}
+                <div class="flex justify-around items-center px-4">
+                    <div class="flex">
+                        <p class="">
+                            {{ contest.name }}
+                            -
+                            <a href="{{ contest.contest_link }}" class="hover:underline">
+                                (Website)
+                            </a>
+                            {% if contest.registration_open %}
+                            -
+                            <a href="{{ contest.registration_link }}" class="hover:underline">
+                                (Registration Open)
+                            </a>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <hr class="mx-4 flex-1  text-deep-muted">
+                    <p class="w-max">
+                        {{ contest.date }}
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="">
+            <p class="text-xl mb-2 flex items-center hover:[&>a]:block" id="general_resources">
+                General Resources
+                <a href="#general_resources" class="pl-2 hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-link-icon lucide-link">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg>
+                </a>
+            </p>
+            <div class="px-4 space-y-2 [&_a]:hover:!underline [&_a]:!text-link no-preflight">
+                {{ general_resources.content_markdown | markdownify }}
+            </div>
+        </div>
+        <div>
+            <p class="text-xl mb-2 flex items-center hover:[&>a]:block" id="past_resources">
+                Past Resources (Lessons and Mocks)
+                <a href="#past_resources" class="pl-2 hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-link-icon lucide-link">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg>
+                </a>
+            </p>
+            <div class="grid grid-cols-2 gap-4">
+                {% for lesson in lesson_data %}
+                <div class="px-4">
+                    <div class="space-y-4">
+                        <p class="">
+                            {{ lesson.index }}. {{ lesson.title }} ({{ lesson.date }})
+                        </p>
+                        <p>
+                            {{ lesson.description }}
+                        </p>
+                    </div>
+                    <div class="space-x-4 ml-10 text-link">
+                        {% for key, value in lesson.links.items %}
+                        <a href="{{ value }}" class="hover:underline">
+                            {{ key }}
+                        </a>
+                        <br>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
