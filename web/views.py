@@ -18,7 +18,7 @@ User = get_user_model()
 
 def index(request):
 	recent_problems = Problem.objects.order_by("-date_added")[:8]
-	
+
 	top_problems = Problem.objects.annotate(
 		submission_count=Count('submissions')
 	).filter(submission_count__gt=0).order_by('-submission_count')[:8]
@@ -27,7 +27,7 @@ def index(request):
 		"content_markdown": """Welcome to WLMath, your one-stop shop for achieving high levels of brain damage from headache-inducing amounts of combinatorics and casework.
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos."""
-	}) 
+	})
 
 	announcements = Announcement.objects.order_by("-creation_date")
 
@@ -36,46 +36,35 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
 
 def problem(request, slug):
 	user = request.user
+
 	problem = get_object_or_404(Problem, slug=slug)
 	solved = not user.is_anonymous and user.problems_solved.contains(problem)
 
+	email_form = None
+	form = SubmitProblemForm(problem=problem)
+
 	success = False
 	if request.method == "POST":
-
-		if user.is_anonymous:
-			return HttpResponse(status=403)
-
-		form = SubmitProblemForm(request.POST, problem=problem)
-		if form.is_valid():
-			success = True
-			if not solved:			
-				request.user.problems_solved.add(problem)
-				request.user.points += problem.points 
-				request.user.save()
-
-				
-			Submission.objects.create(**{
-				'user': request.user,
-				'problem': problem,
-				'submission': form.cleaned_data['answer'],
-				'is_correct': True
-			})
-
-		elif form.is_correct == False:
-			Submission.objects.create(**{
-				'user': request.user,
-				'problem': problem,
-				'submission': form.return_answer,
-				'is_correct': False
-			})
-	else:
-		form = SubmitProblemForm(problem=problem)
+		if "email" in request.POST:
+			email_form = AddEmailForm(request.POST)
+			print(email_form)
+			if email_form.is_valid():
+				email = email_form.cleaned_data["email"]
+				with open("winning_emails.txt", "a") as f:
+					f.write(email + "\n")
+				return redirect(reverse_lazy("problem", kwargs={"slug": slug}))
+		else:
+			form = SubmitProblemForm(request.POST, problem=problem)
+			if form.is_valid():
+				success = True
+				email_form = AddEmailForm()
 
 	return render(request, "problem.html", {
 		"problem": problem,
 		"form": form,
 		"success": success,
 		"solved": solved,
+		"email_form": email_form,
 	})
 
 class SubmitProblemForm(forms.Form):
@@ -100,8 +89,11 @@ class SubmitProblemForm(forms.Form):
 				self.is_correct = True
 		return super().clean()
 
+class AddEmailForm(forms.Form):
+	email = forms.EmailField()
+
 def problem_submission(request, slug, is_self = False):
-	
+
 	problem = get_object_or_404(Problem, slug=slug)
 
 	submissions = problem.submissions.all()
@@ -305,7 +297,7 @@ def user_problems(request, username):
 def resources(request):
 	content, _ = WebsiteData.objects.get_or_create(data_id="resources", defaults={
 		"content_markdown": "Content editable in admin panel, in website data under /resources"
-	}) 
+	})
 
 	contest_data = UpcomingContest.objects.filter(date__gt=timezone.now()).order_by("date")
 	lessons = PastResource.objects.filter(date__lt=timezone.now()).order_by("date")
@@ -317,7 +309,7 @@ def resources(request):
 	})
 
 def submission(request, pk):
-	
+
 	submission = get_object_or_404(Submission, pk=pk)
 	email_hash = sha256(submission.user.email.encode('utf-8')).hexdigest()
 

@@ -1,7 +1,8 @@
 # wlmath
 
-wlmath (alternatively stylized wlmath) is an online platform for the Mackenzie Math Club to host individual problems, weekly contests, mock contests, video explanations, and more. It will feature leaderboards for various criteria (problems solved, etc) and an admin panel for execs and teachers to add problems to the website.
-It will soon exist on the first of October, 2025.
+CLUB CRAWL BRANCH! Anonymous users can solve problems, and an email is prompted after the user solves the problem.
+
+Emails are written to `./winning_emails.txt`.
 
 ## setup
 

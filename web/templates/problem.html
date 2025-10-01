@@ -61,16 +61,6 @@
 					{% endif %}
 				</p>
 				{% endif %}
-				{% if user.is_anonymous %}
-				<p class="absolute inset-0 bg-slate-900/75 grid place-items-center text-center text-slate-300 px-4">
-					<span>
-						<a href="{% url 'login' %}?next={{ request.path }}">Log in</a>
-						or
-						<a href="{% url 'register' %}?next={{ request.path }}">Register</a>
-						to submit solutions to this problem
-					</span>
-				</p>
-				{% endif %}
 			</form>
 			{% if solved %}
 				<a class="mt-40" href="./submissions">View Submissions</a>
@@ -84,4 +74,21 @@
 		{% endif %}
 	</div>
 </div>
+
+{% if email_form %}
+<div class="fixed inset-0 bg-slate-900/75 grid place-items-center">
+	<div class="max-w-80 border-wlblue border-2 p-4 flex flex-col gap-4">
+		<h1 class="text-4xl">Congrats!</h1>
+		<p>Enter the email associated with your WLMath account (or the email you'll use to register for WLMath) to receive a shiny badge!</p>
+
+		{{ email_form.email.errors }}
+
+		<form method="POST">
+			{% csrf_token %}
+			{{ email_form.email }}
+			<button type="submit" class="underline cursor-pointer">Submit!</button>
+		</form>
+	</div>
+</div>
+{% endif %}
 {% endblock content %}

@@ -11,21 +11,29 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+try:
+	SECRETS = json.loads(open(BASE_DIR / "secrets.json").read())
+	DEBUG = SECRETS["debug"]
+except:
+	SECRETS = {}
+	DEBUG = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p1+8*h9!su^28pa2@#j=8gomi1d_dy@*$eysu*is4+br4opmvm'
+if DEBUG:
+	SECRET_KEY = 'django-insecure-p1+8*h9!su^28pa2@#j=8gomi1d_dy@*$eysu*is4+br4opmvm'
+else:
+	SECRET_KEY = SECRETS["secret_key"]
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [] if DEBUG else SECRETS["allowed_hosts"]
+CSRF_TRUSTED_ORIGINS = [] if DEBUG else SECRETS["csrf_trusted_origins"]
 
 AUTH_USER_MODEL = "web.WlmathUser"
 LOGIN_REDIRECT_URL = "/"
