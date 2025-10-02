@@ -122,7 +122,10 @@ def problem_list(request):
 		problems_solved = request.user.problems_solved.all()
 	else:
 		problems_solved = set()
-	return render(request, "problemlist.html", { "problems": problems, "solved": problems_solved })
+	return render(request, "problemlist.html", {
+		"problems": problems,
+		"solved": problems_solved,
+	})
 
 def users(request):
 	page_limit = 50

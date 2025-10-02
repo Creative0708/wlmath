@@ -111,3 +111,10 @@ th.sortable.desc::after, th.ssf-sortable.desc::after {
 		}
 	}
 }
+
+.tag-container {
+	@apply flex flex-wrap gap-2 mt-1 overflow-hidden;
+	> span {
+		@apply inline-block px-1 py-0.5 text-xs font-medium text-[color-mix(in_lab,var(--color),#fff_60%)] max-h-[1.25rem] bg-gradient-to-b from-transparent to-[var(--color)]/30 border-[var(--color)]/70 border-b-3;
+	}
+}

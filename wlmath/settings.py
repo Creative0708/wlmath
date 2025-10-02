@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "martor",
+    "colorfield",
 ]
 
 MARTOR_ALTERNATIVE_JQUERY_JS_FILE = "noop.js"

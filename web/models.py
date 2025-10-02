@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db.models.base import Manager
 from django.db.models.functions import Now
+from colorfield.fields import ColorField
 from .markdown import MartorField
 from . import consts
 
@@ -26,11 +27,12 @@ class ProblemManager(Manager):
 	pass
 
 class Tag(models.Model):
-    contraction = models.CharField(max_length=8, unique=True)
-    name = models.CharField(max_length=32)
+	contraction = models.CharField(max_length=8, unique=True)
+	name = models.CharField(max_length=32)
+	color = ColorField(default="#ffffff")
 
-    def __str__(self):
-        return self.name
+	def __str__(self):
+		return self.name
 
 class Problem(models.Model):
 	objects = ProblemManager()
