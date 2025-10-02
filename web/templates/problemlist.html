@@ -2,16 +2,16 @@
 
 {% block content %}
 <div class="bg-slate-900 p-4 border-b-4 border-wlblue">
-	<h1 class="text-5xl font-bold mb-4">Problem list</h1>
+	<h1 class="text-5xl font-bold mb-4">problem list</h1>
 	<p>
-		Filters: TODO
+		Filters: 
 	</p>
 </div>
 
 {# TODO: infinite scrolling/pagination #}
 <ul class="grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] justify-stretch gap-8 my-8">
 	{% for problem in problems %}
-	<li class="h-24">
+	<li class="h-32">
 		<a class="flex flex-col justify-center bg-slate-900 hover:bg-slate-800 transition-colors duration-75 border-b-4 border-wlblue px-4 py-2 w-full h-full" href="{{ problem.url }}" class="">
 			<h1 class="text-xl font-bold">
 				{% if problem in solved %}
@@ -19,6 +19,14 @@
 				{% endif %}
 				{{ problem.title }}
 			</h1>
+			<div class="flex flex-wrap gap-2 mt-1 min-h-[2.5rem]">
+				{% for tag in problem.tags.all %}
+					<span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium text-white {{ tag.color }} max-h-[1.25rem]">
+						<!-- 1.25 => magic number go brrr -->
+						{{ tag.contraction }}
+					</span>
+			{% endfor %}
+			</div>
 			<p class="bottom-2 w-full mt-1">
 				<span>Points: {{ problem.points }}</span>
 				<span class="text-slate-400 float-right">{{ problem.date_added | date:"Y/m/d" }}</span>

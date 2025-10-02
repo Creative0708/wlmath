@@ -1,6 +1,6 @@
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wlmath.settings')
-from random import randint, choice
+from random import randint, choice, sample
 from datetime import datetime, timedelta
 now = datetime.now()
 
@@ -14,7 +14,9 @@ if input("confirm? ").lower() not in ("y", "yes", "actually no please don't"):
 
 import django
 django.setup()
-from web.models import WlmathUser, Problem
+from web.models import WlmathUser, Problem, Tag
+
+TAGS = list(Tag.objects.all())
 
 for user in range(1, NUM_USERS + 1):
 	WlmathUser.objects.create(
@@ -29,7 +31,7 @@ for problem in range(1, NUM_PROBLEMS + 1):
 	answer = eval(f"{n1}{op}{n2}")
 	if op == "*": op = r"\cdot"
 	problem_text = f"What is ${n1} {op} {n2}$?"
-	Problem.objects.create(
+	p = Problem.objects.create(
 		title=f"Problem {problem}",
 		body=problem_text,
 		answer=answer,
@@ -38,3 +40,4 @@ for problem in range(1, NUM_PROBLEMS + 1):
 		date_added=now - timedelta(days=randint(2, 50)),
 		date_modified=now - timedelta(minutes=randint(0, 2 * 60 * 24)),
 	)
+	p.tags.set(sample(TAGS, 3))

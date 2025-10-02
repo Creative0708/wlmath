@@ -1,9 +1,13 @@
 {
   "scripts": {
-    "watch": "tailwindcss --cwd web -i static/base.css -o static/generated.css --watch"
+    "watch": "tailwindcss --cwd web -i static/base.css -o static/generated.css --watch",
+    "dev": "concurrently \"npm run watch\" \"python manage.py runserver\""
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.12",
     "tailwindcss": "^4.1.12"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }

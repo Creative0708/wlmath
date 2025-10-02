@@ -26,11 +26,12 @@ class ProblemManager(Manager):
 	pass
 
 class Tag(models.Model):
-    contraction = models.CharField(max_length=8, unique=True)
-    name = models.CharField(max_length=32)
+	contraction = models.CharField(max_length=8, unique=True)
+	name = models.CharField(max_length=32)
+	color = models.CharField(max_length=16, default="bg-zinc-400")
 
-    def __str__(self):
-        return self.name
+	def __str__(self):
+		return self.name
 
 class Problem(models.Model):
 	objects = ProblemManager()
