@@ -59,19 +59,6 @@ class SubmitProblemForm(forms.Form):
 			self.add_error("answer", f"That's not the right answer.")
 		return super().clean()
 
-TAG_COLORS = {
-	"EZ": "bg-green-500",
-    "MD": "bg-yellow-500",
-    "HD": "bg-red-500",
-    "VH": "bg-purple-700",
-    "ALG": "bg-sky-500",
-    "GEO2D": "bg-fuchsia-700",
-    "GEO3D": "bg-fuchsia-400",
-    "CAV": "bg-teal-300",
-    "CAP": "bg-lime-600",
-    "NT": "bg-emerald-800",
-    "OTHER": "bg-zinc-400",
-}
 
 def problem_list(request):
 	problems = Problem.objects.order_by("date_added")
@@ -82,8 +69,7 @@ def problem_list(request):
 		problems_solved = set()
 	return render(request, "problemlist.html", { 
 		"problems": problems, 
-		"solved": problems_solved, 
-		"tag_colors": TAG_COLORS, 
+		"solved": problems_solved,
   	})
 
 def users(request):
