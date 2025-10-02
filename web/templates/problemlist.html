@@ -4,7 +4,7 @@
 <div class="bg-slate-900 p-4 border-b-4 border-wlblue">
 	<h1 class="text-5xl font-bold mb-4">problem list</h1>
 	<p>
-		Filters: 
+		Filters:
 	</p>
 </div>
 
@@ -19,13 +19,12 @@
 				{% endif %}
 				{{ problem.title }}
 			</h1>
-			<div class="flex flex-wrap gap-2 mt-1 min-h-[2.5rem]">
+			<div class="tag-container h-10 mask-b-from-70%">
 				{% for tag in problem.tags.all %}
-					<span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium text-white {{ tag.color }} max-h-[1.25rem]">
-						<!-- 1.25 => magic number go brrr -->
+					<span style="--color: {{ tag.color }}">
 						{{ tag.contraction }}
 					</span>
-			{% endfor %}
+				{% endfor %}
 			</div>
 			<p class="bottom-2 w-full mt-1">
 				<span>Points: {{ problem.points }}</span>

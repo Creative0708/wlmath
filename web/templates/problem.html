@@ -73,6 +73,16 @@
 				{% endif %}
 			</form>
 		</div>
+		<div class="generic-container">
+			<h1>Tags</h1>
+			<div class="tag-container">
+			{% for tag in problem.tags.all %}
+				<span style="--color: {{ tag.color }}">
+					{{ tag.name }}
+				</span>
+			{% endfor %}
+			</div>
+		</div>
 		{% if user.is_superuser %}
 		<div class="generic-container">
 			<h1 class="text-2xl">Admin</h1>

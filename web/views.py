@@ -59,7 +59,6 @@ class SubmitProblemForm(forms.Form):
 			self.add_error("answer", f"That's not the right answer.")
 		return super().clean()
 
-
 def problem_list(request):
 	problems = Problem.objects.order_by("date_added")
 
@@ -67,10 +66,10 @@ def problem_list(request):
 		problems_solved = request.user.problems_solved.all()
 	else:
 		problems_solved = set()
-	return render(request, "problemlist.html", { 
-		"problems": problems, 
+	return render(request, "problemlist.html", {
+		"problems": problems,
 		"solved": problems_solved,
-  	})
+	})
 
 def users(request):
 	page_limit = 50
