@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container md:max-w-7/8 mx-auto px-8">
 <div class="bg-slate-900 p-4 border-b-4 border-wlblue">
 	<h1 class="text-5xl font-bold mb-4">problem list</h1>
 	<p>
@@ -9,7 +10,7 @@
 </div>
 
 {# TODO: infinite scrolling/pagination #}
-<ul class="grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] justify-stretch gap-8 my-8">
+<ul class="grid xl:grid-cols-4 grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] justify-stretch gap-8 my-8 ">
 	{% for problem in problems %}
 	<li class="h-32">
 		<a class="flex flex-col justify-center bg-slate-900 hover:bg-slate-800 transition-colors duration-75 border-b-4 border-wlblue px-4 py-2 w-full h-full" href="{{ problem.url }}" class="">
@@ -34,4 +35,5 @@
 	</li>
 	{% endfor %}
 </ul>
+</div>
 {% endblock content %}

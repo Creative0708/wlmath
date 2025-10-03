@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('web', '0007_pastresource'),
+        ('web', '0013_pastresource'),
     ]
 
     operations = [

@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('web', '0004_merge_20250910_2312'),
+        ('web', '0001_initial'),
     ]
 
     operations = [
@@ -19,9 +19,9 @@ class Migration(migrations.Migration):
                 ('content_markdown', web.markdown.MartorField()),
             ],
         ),
-        migrations.AlterField(
-            model_name='wlmathuser',
-            name='bio',
-            field=models.TextField(blank=True, max_length=5000),
-        ),
+        # migrations.AlterField(
+        #     model_name='wlmathuser',
+        #     name='bio',
+        #     field=models.TextField(blank=True, max_length=5000),
+        # ),
     ]
