@@ -5,6 +5,8 @@ It will soon exist on the first of October, 2025.
 ### 1st of October, 2025 update:
 As funding has not been recieved yet, proper deployment will be delayed to mid-october when clubs recieve SAC funding.
 
+### 19th of November, 2025 update:
+A domain and hosting provider will be secured by the end of the week.
 ## setup
 
 ```
